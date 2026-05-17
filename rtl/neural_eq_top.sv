@@ -13,31 +13,31 @@
 `include "rom_L3B_W.sv"
 
 module neural_eq_top (
-    input  logic clk, rst_n,
-    // input  logic fun_clk, fun_rst_n,
-    // input  logic scan_clk, scan_rst_n,test_mode,
+    // input  logic clk, rst_n,
+    input  logic fun_clk, fun_rst_n,
+    input  logic scan_clk, scan_rst_n,test_mode,
     input  logic valid_in,
     input  logic signed [15:0] in_I, in_Q,
     output logic signed [15:0] out_I, out_Q,
     output logic valid_out
 );
 
-    // wire clk,rst_n;
+    wire clk,rst_n;
 
-    // // mux_clock 
-    // Mux2x1 U0_Mux2x1(
-    //     .in_0(fun_clk)   ,
-    //     .in_1(scan_clk)  ,
-    //     .sel(test_mode)  ,
-    //     .out(clk)
-    // ); 
-    // // mux_reset
-    // Mux2x1 U1_Mux2x1(
-    //     .in_0(fun_rst_n)   ,
-    //     .in_1(scan_rst_n)  ,
-    //     .sel(test_mode)  ,
-    //     .out(rst_n)
-    // );  
+    // mux_clock 
+    Mux2x1 U0_Mux2x1(
+        .in_0(fun_clk)   ,
+        .in_1(scan_clk)  ,
+        .sel(test_mode)  ,
+        .out(clk)
+    ); 
+    // mux_reset
+    Mux2x1 U1_Mux2x1(
+        .in_0(fun_rst_n)   ,
+        .in_1(scan_rst_n)  ,
+        .sel(test_mode)  ,
+        .out(rst_n)
+    );  
 
 
     // Internal signals

@@ -17,7 +17,7 @@ define_design_lib work -path ./work
 
 # --- Top module
 set design neural_eq_top
-# --fixes all violations in the design
+# --fixes all violations in the design ICC2
 set compile_top_all_paths true
 # --- Define Structured Verification Format (SVF) 
 set_svf ${design}.svf 
@@ -46,12 +46,12 @@ check_design
 # ################################## #
 # =========== Constraints ========== #
 # ################################## #
-source ../cons/cons.tcl 
+source ../cons/cons.tcl  
 
 # ################################## #
 # ========== Optimization ========== #
 # ################################## #
-set_fix_multiple_port_nets -all -buffer_constants
+set_fix_multiple_port_nets -all -buffer_constants 
 link
 
 compile -map_effort high
@@ -98,7 +98,7 @@ report_names -rules verilog
 set verilogout_no_tri	 true
 set verilogout_equation  false
 
-
+## only in icc2 el gammal flow
 write_sdc ../output/${design}.sdc 
 write_sdf ../output/${design}.sdf 
 
