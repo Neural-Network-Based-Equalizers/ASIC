@@ -1,0 +1,32 @@
+ 
+****************************************
+Report : area
+Design : neural_eq_top
+Version: O-2018.06-SP1
+Date   : Wed Apr 29 00:48:58 2026
+****************************************
+
+Information: Updating design information... (UID-85)
+Warning: Design 'neural_eq_top' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+Library(s) Used:
+
+    saed90nm_max (File: /home/ICer/Downloads/Lib/synopsys/models/saed90nm_max.db)
+
+Number of ports:                         2532
+Number of nets:                          6002
+Number of cells:                         4657
+Number of combinational cells:           2365
+Number of sequential cells:              2287
+Number of macros/black boxes:               0
+Number of buf/inv:                       1061
+Number of references:                       6
+
+Combinational area:              22310.092893
+Buf/Inv area:                     6049.382544
+Noncombinational area:           40108.032616
+Macro/Black Box area:                0.000000
+Net Interconnect area:            5205.019398
+
+Total cell area:                 62418.125508
+Total area:                      67623.144906
+1

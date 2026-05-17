@@ -1,0 +1,72 @@
+****************************************
+Report : qor
+Design : neural_eq_top
+Version: O-2018.06-SP1
+Date   : Wed Apr 29 17:38:41 2026
+****************************************
+Warning: no valid parasitic for default corner(LATE) (NEX-018)
+Warning: no valid parasitic for default corner(EARLY) (NEX-018)
+Warning: no valid parasitic for (all corners) corner((both specs)) (NEX-018)
+Information: The stitching and editing of coupling caps is turned OFF for design 'neural_eq.dlib:neural_eq_top_fp.design'. (TIM-125)
+Warning: The extractor can not be initialized for design 'neural_eq_top'. Zero interconnect delay is used in timing analysis. (TIM-102)
+Warning: Batch extraction is skipped for block "neural_eq_top"
+Information: Update timing completed net estimation for all the timing graph nets (TIM-111)
+Information: Net estimation statistics: timing graph nets = 3665, routed nets = 0, across physical hierarchy nets = 0, parasitics cached nets = 0, delay annotated nets = 0, parasitics annotated nets = 0, multi-voltage nets = 0. (TIM-112)
+
+
+Scenario           'default'
+Timing Path Group  'clk'
+----------------------------------------
+Levels of Logic:                     12
+Critical Path Length:              3.97
+Critical Path Slack:               5.38
+Critical Path Clk Period:         10.00
+Total Negative Slack:              0.00
+No. of Violating Paths:               0
+Worst Hold Violation:              0.00
+Total Hold Violation:              0.00
+No. of Hold Violations:               0
+----------------------------------------
+
+
+Cell Count
+----------------------------------------
+Hierarchical Cell Count:              5
+Hierarchical Port Count:           2464
+Leaf Cell Count:                   3611
+Buf/Inv Cell Count:                1061
+Buf Cell Count:                     570
+Inv Cell Count:                     491
+CT Buf/Inv Cell Count:                0
+Combinational Cell Count:          2365
+Sequential Cell Count:             1246
+Macro Count:                          0
+----------------------------------------
+
+
+Area
+----------------------------------------
+Combinational Area:            22310.09
+Noncombinational Area:         40108.03
+Buf/Inv Area:                   6049.38
+Total Buffer Area:              3327.90
+Total Inverter Area:            2721.48
+Macro/Black Box Area:              0.00
+Net Area:                             0
+Net XLength:                       0.00
+Net YLength:                       0.00
+----------------------------------------
+Cell Area (netlist):                          62418.12
+Cell Area (netlist and physical only):        73510.50
+Net Length:                        0.00
+
+
+Design Rules
+----------------------------------------
+Total Number of Nets:              4192
+Nets with Violations:                 0
+Max Trans Violations:                 0
+Max Cap Violations:                   0
+----------------------------------------
+
+1

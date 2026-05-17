@@ -1,0 +1,30 @@
+ 
+****************************************
+Report : cell
+Design : neural_eq_top
+Version: O-2018.06-SP1
+Date   : Wed Apr 29 00:48:59 2026
+****************************************
+
+Attributes:
+    b - black box (unknown)
+    h - hierarchical
+    n - noncombinational
+    r - removable
+    u - contains unmapped logic
+
+Cell                      Reference       Library             Area  Attributes
+--------------------------------------------------------------------------------
+U1                        INVX2           saed90nm_max    6.451200  
+U2                        INVX0           saed90nm_max    5.529600  
+u_input_window            input_window_ctrl               8664.883230
+                                                                    h, n
+u_layer1                  layer1_compute                  26162.381129
+                                                                    h, n
+u_layer2                  layer2_compute                  25747.661124
+                                                                    h, n
+u_layer3                  layer3_compute                  1831.219225
+                                                                    h, n
+--------------------------------------------------------------------------------
+Total 6 cells                                             62418.125508
+1

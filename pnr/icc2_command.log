@@ -1,0 +1,182 @@
+#@ # 
+#@ # Running icc2_shell Version O-2018.06-SP1 for linux64 -- Jul 17, 2018
+#@ # Date:   Wed Apr 29 16:59:30 2026
+#@ # Run by: ICer@IC_EDA
+#@ 
+
+# ============================================================ #
+# ================== Floorplan Script ======================== #
+# ============================================================ #
+# Project  : Neural Network Equalizer
+# Top Cell : neural_eq_top
+# Tool     : IC Compiler II (icc2_shell)
+# Process  : SAED 90nm
+# Usage    : icc2_shell -f ./3_floorplan/script/floorplan.tcl
+#
+# Design hierarchy:
+#   neural_eq_top
+#     |- u_input_window  (input_window_ctrl)   small ctrl logic
+#     |- u_layer1        (layer1_compute)       32 MACs, ROM 128x48b
+#     |- u_layer2        (layer2_compute)       32 MACs, ROM 2x192x48b  <- heaviest
+#     |- u_layer3        (layer3_compute)        2 MACs, ROM 2x12x48b   small
+#
+# Ports:
+#   Inputs  : clk, rst_n, valid_in, in_I[15:0], in_Q[15:0]    (37 bits)
+#   Outputs : out_I[15:0], out_Q[15:0], valid_out               (33 bits)
+#
+# Clock : 10 ns (100 MHz)   critical path = 16x16 MAC chain
+# ============================================================ #
+# ============================================================ #
+# ==================== Variables ============================= #
+# ============================================================ #
+set DESIGN_NAME    "neural_eq_top"
+set DLIB_NAME      "./2_design_library/neural_eq.dlib"
+set IN_BLOCK       "${DESIGN_NAME}_init"
+set OUT_BLOCK      "${DESIGN_NAME}_fp"
+set REPORT_DIR     "./3_floorplan/report"
+set OUTPUT_DIR     "./3_floorplan/output"
+file mkdir $REPORT_DIR
+file mkdir $OUTPUT_DIR
+# ============================================================ #
+# ==================== Open Design =========================== #
+# ============================================================ #
+# Remove any stale lock from a previous interrupted session
+set lock_file "${DLIB_NAME}/${IN_BLOCK}/design.ndm.lock"
+if {[file exists $lock_file]} {
+    sh rm -f $lock_file
+    puts "INFO: Removed stale lock file."
+}
+open_lib  $DLIB_NAME
+open_block ${IN_BLOCK}.design
+copy_block     -from_block ${DLIB_NAME}:${IN_BLOCK}.design     -to_block   $OUT_BLOCK
+current_block ${OUT_BLOCK}.design
+# Cap M8 as the max routing  keep M9 for power straps only.layer
+set_attribute [get_layers {M1 M3 M5 M7 M9}] routing_direction vertical
+set_attribute [get_layers {M2 M4 M6 M8}]    routing_direction horizontal
+# Track offsets (SAED 90nm minimum pitch discipline)
+set_attribute [get_layers M1] track_offset 0.03
+set_attribute [get_layers M2] track_offset 0.04
+# Ignore M9 for signal routing; use only M1-M8
+set_ignored_layers -max_routing_layer M8
+start_gui
+gui_set_pref_value -category {SelectByNamePalette} -key {ObjectType} -value {Logical Cells}
+win_set_filter -visible -class cell -filter {hard_macro_margin hard_margin route_blockage_margin soft_margin}
+win_set_filter -visible -class placement_blockage -filter {wiring} -layer {0-77}
+win_set_filter -expand_cell_types {soft_macro  }
+win_set_select_class -visible {cell port bound routing_blockage shaping_blockage pg_region pin_blockage block_shielding topology_node topology_edge core_area die_area edit_group shape via terminal fill_cell placement_blockage }
+win_set_filter -class cell -filter {cell_array hard_macro_margin hard_margin route_blockage_margin soft_margin}
+win_set_filter -class placement_blockage -filter {wiring} -layer {0-77}
+win_set_select_class {cell port bound routing_blockage shaping_blockage pg_region pin_blockage topology_node topology_edge edit_group shape via placement_blockage }
+set site_name [get_site_defs]
+set_attribute [get_site_defs $site_name] is_default true
+set_attribute [get_site_defs $site_name] symmetry {Y}
+initialize_floorplan     -core_utilization  0.55     -shape             R        -orientation       N        -core_offset       {60 60 60 60}     -flip_first_row    false     -side_ratio        {1 1}
+set_block_pin_constraints     -allowed_layers    {M3}     -sides             {1}
+place_pins -ports [get_ports {in_I in_Q valid_in}]
+# --- Data Outputs on RIGHT (M3, side 3)
+set_block_pin_constraints     -allowed_layers    {M3}     -sides             {3}
+place_pins -ports [get_ports {out_I out_Q valid_out}]
+# --- Clock on BOTTOM (M4, side  feeds CTS spine2)
+set_block_pin_constraints     -allowed_layers    {M4}     -sides             {2}      -corner_keepout_num_tracks 2
+place_pins -ports [get_ports {clk}]
+# --- Reset on TOP (M4, side  false path, any convenient side4)
+set_block_pin_constraints     -allowed_layers    {M4}     -sides             {4}      -corner_keepout_num_tracks 2
+place_pins -ports [get_ports {rst_n}]
+remove_placement_blockages -all
+remove_placement_blockages -all
+create_placement_blockage     -name   corner_BL     -type   hard     -boundary {{0 0} {15 15}}
+create_placement_blockage     -name   corner_BR     -type   hard     -boundary {{[expr [get_attribute [current_block] boundary_bbox_ur_x] - 15] 0}                {[get_attribute [current_block] boundary_bbox_ur_x] 15}}
+create_placement_blockage     -name   corner_TL     -type   hard     -boundary {{0 [expr [get_attribute [current_block] boundary_bbox_ur_y] - 15]}                {15 [get_attribute [current_block] boundary_bbox_ur_y]}}
+create_placement_blockage     -name   corner_TR     -type   hard     -boundary {{[expr [get_attribute [current_block] boundary_bbox_ur_x] - 15]                 [expr [get_attribute [current_block] boundary_bbox_ur_y] - 15]}                {[get_attribute [current_block] boundary_bbox_ur_x]                 [get_attribute [current_block] boundary_bbox_ur_y]}}
+create_placement_blockage     -name   corner_BL     -type   hard     -boundary {{0 0} {15 15}}
+remove_placement_blockages -all
+create_placement_blockage     -name   corner_BL     -type   hard     -boundary {{0 0} {15 15}}
+remove_placement_blockages -all
+create_placement_blockage     -name   corner_BL     -type   hard     -boundary {{0 0} {15 15}}
+create_placement_blockage     -name   corner_BR     -type   hard     -boundary {{[expr [get_attribute [current_block] boundary_bbox_ur_x] - 15] 0}                {[get_attribute [current_block] boundary_bbox_ur_x] 15}}
+gui_scroll -window [gui_get_current_window -types Layout -view] -hrel -0.25
+remove_placement_blockages -all
+remove_placement_blockages -all
+set DIE_URX [get_attribute [current_block] boundary_bbox_ur_x]
+set DIE_URY [get_attribute [current_block] boundary_bbox_ur_y]
+set CORNER  15
+# Now compute the corner coordinates
+set BR_X1 [expr {$DIE_URX - $CORNER}]
+set TL_Y1 [expr {$DIE_URY - $CORNER}]
+set CORNER  15
+set BR_X1   [expr {$DIE_URX - $CORNER}]
+set TL_Y1   [expr {$DIE_URY - $CORNER}]
+# Bottom-Left
+create_placement_blockage -name corner_BL -type hard     -boundary [list [list 0 0] [list $CORNER $CORNER]]
+# Bottom-Right
+create_placement_blockage -name corner_BR -type hard     -boundary [list [list $BR_X1 0] [list $DIE_URX $CORNER]]
+# Top-Left
+create_placement_blockage -name corner_TL -type hard     -boundary [list [list 0 $TL_Y1] [list $CORNER $DIE_URY]]
+# Top-Right
+create_placement_blockage -name corner_TR -type hard     -boundary [list [list $BR_X1 $TL_Y1] [list $DIE_URX $DIE_URY]]
+remove_placement_blockages -all
+set CORNER  15
+set BR_X1   [expr {$DIE_URX - $CORNER}]
+set TL_Y1   [expr {$DIE_URY - $CORNER}]
+# Bottom-Left
+create_placement_blockage -name corner_BL -type hard     -boundary [list [list 0 0] [list $CORNER $CORNER]]
+# Bottom-Right
+create_placement_blockage -name corner_BR -type hard     -boundary [list [list $BR_X1 0] [list $DIE_URX $CORNER]]
+# Top-Left
+create_placement_blockage -name corner_TL -type hard     -boundary [list [list 0 $TL_Y1] [list $CORNER $DIE_URY]]
+# Top-Right
+create_placement_blockage -name corner_TR -type hard     -boundary [list [list $BR_X1 $TL_Y1] [list $DIE_URX $DIE_URY]]
+remove_placement_blockages -all
+set bbox [get_attribute [current_block] bbox]
+puts "Die bbox = $bbox"
+set DIE_LLX [lindex [lindex $bbox 0] 0]
+set DIE_LLY [lindex [lindex $bbox 0] 1]
+set DIE_URX [lindex [lindex $bbox 1] 0]
+set DIE_URY [lindex [lindex $bbox 1] 1]
+puts "URX = $DIE_URX   URY = $DIE_URY"
+set CORNER  15
+set BR_X1   [expr {$DIE_URX - $CORNER}]
+set TL_Y1   [expr {$DIE_URY - $CORNER}]
+# Bottom-Left
+create_placement_blockage -name corner_BL -type hard     -boundary [list [list 0 0] [list $CORNER $CORNER]]
+# Bottom-Right
+create_placement_blockage -name corner_BR -type hard     -boundary [list [list $BR_X1 0] [list $DIE_URX $CORNER]]
+# Top-Left
+create_placement_blockage -name corner_TL -type hard     -boundary [list [list 0 $TL_Y1] [list $CORNER $DIE_URY]]
+# Top-Right
+create_placement_blockage -name corner_TR -type hard     -boundary [list [list $BR_X1 $TL_Y1] [list $DIE_URX $DIE_URY]]
+set LEFT_X2  20
+set RIGHT_X1 [expr {$DIE_URX - 20}]
+set SIDE_Y1  $CORNER
+set SIDE_Y2  [expr {$DIE_URY - $CORNER}]
+# Left IO buffer zone
+create_placement_blockage     -name               left_io_buf     -type               partial     -blocked_percentage 60     -boundary [list [list 0 $SIDE_Y1] [list $LEFT_X2 $SIDE_Y2]]
+# Right IO buffer zone
+create_placement_blockage     -name               right_io_buf     -type               partial     -blocked_percentage 60     -boundary [list [list $RIGHT_X1 $SIDE_Y1] [list $DIE_URX $SIDE_Y2]]
+gui_zoom -window [gui_get_current_window -types Layout -view] -factor 0.5 -at_point {121.030 104.010}
+gui_zoom -window [gui_get_current_window -types Layout -view] -factor 0.5 -at_point {120.265 104.010}
+gui_zoom -window [gui_get_current_window -types Layout -view] -factor 0.5 -at_point {120.265 102.485}
+gui_zoom -window [gui_get_current_window -types Layout -view] -factor 2 -at_point {119.870 103.460}
+gui_zoom -window [gui_get_current_window -types Layout -view] -factor 2 -at_point {119.870 103.460}
+gui_zoom -window [gui_get_current_window -types Layout -view] -factor 2 -at_point {119.870 103.460}
+gui_zoom -window [gui_get_current_window -types Layout -view] -factor 0.5 -at_point {119.870 103.460}
+win_select_objects -slct_targets global -at {438.540 69.055} -radius 0.8192
+win_select_objects -slct_targets global -at {447.550 2.700} -radius 0.8192
+create_tap_cells     -lib_cell saed90nm_max/DCAP     -pattern  every_other_row      -distance 10
+report_ports  [all_inputs]  > ${REPORT_DIR}/fp_input_ports.rpt
+report_ports  [all_outputs] > ${REPORT_DIR}/fp_output_ports.rpt
+report_cell                 > ${REPORT_DIR}/fp_cells.rpt
+report_nets                 > ${REPORT_DIR}/fp_nets.rpt
+report_qor                  > ${REPORT_DIR}/fp_qor.rpt
+report_utilization          > ${REPORT_DIR}/fp_utilization.rpt
+get_placement_blockages     > ${REPORT_DIR}/fp_blockages.rpt
+write_def    ${OUTPUT_DIR}/${DESIGN_NAME}_fp.def
+write_verilog -include {all} ${OUTPUT_DIR}/${DESIGN_NAME}_fp.v
+write_sdc    -output ${OUTPUT_DIR}/${DESIGN_NAME}_fp.sdc
+# ============================================================ #
+# ===================== Save Block =========================== #
+# ============================================================ #
+save_block
+win_select_objects -slct_targets global -at {445.095 9.255} -radius 0.8192
+win_select_objects -slct_targets global -at {454.925 2.700} -radius 0.8192
+change_selection 

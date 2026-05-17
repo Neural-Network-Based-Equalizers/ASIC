@@ -1,0 +1,399 @@
+
+icc2_shell> # ============================================================ #
+icc2_shell> # ================== Floorplan Script ======================== #
+icc2_shell> # ============================================================ #
+icc2_shell> # Project  : Neural Network Equalizer
+icc2_shell> # Top Cell : neural_eq_top
+icc2_shell> # Tool     : IC Compiler II (icc2_shell)
+icc2_shell> # Process  : SAED 90nm
+icc2_shell> # Usage    : icc2_shell -f ./3_floorplan/script/floorplan.tcl
+icc2_shell> #
+icc2_shell> # Design hierarchy:
+icc2_shell> #   neural_eq_top
+icc2_shell> #     |- u_input_window  (input_window_ctrl)   small ctrl logic
+icc2_shell> #     |- u_layer1        (layer1_compute)       32 MACs, ROM 128x48b
+icc2_shell> #     |- u_layer2        (layer2_compute)       32 MACs, ROM 2x192x48b  <- heaviest
+icc2_shell> #     |- u_layer3        (layer3_compute)        2 MACs, ROM 2x12x48b   small
+icc2_shell> #
+icc2_shell> # Ports:
+icc2_shell> #   Inputs  : clk, rst_n, valid_in, in_I[15:0], in_Q[15:0]    (37 bits)
+icc2_shell> #   Outputs : out_I[15:0], out_Q[15:0], valid_out               (33 bits)
+icc2_shell> #
+icc2_shell> # Clock : 10 ns (100 MHz)   critical path = 16x16 MAC chain
+icc2_shell> # ============================================================ #
+icc2_shell> 
+icc2_shell> # ============================================================ #
+icc2_shell> # ==================== Variables ============================= #
+icc2_shell> # ============================================================ #
+icc2_shell> set DESIGN_NAME    "neural_eq_top"
+neural_eq_top
+icc2_shell> set DLIB_NAME      "./2_design_library/neural_eq.dlib"
+./2_design_library/neural_eq.dlib
+icc2_shell> set IN_BLOCK       "${DESIGN_NAME}_init"
+neural_eq_top_init
+icc2_shell> set OUT_BLOCK      "${DESIGN_NAME}_fp"
+neural_eq_top_fp
+icc2_shell> 
+icc2_shell> set REPORT_DIR     "./3_floorplan/report"
+./3_floorplan/report
+icc2_shell> set OUTPUT_DIR     "./3_floorplan/output"
+./3_floorplan/output
+icc2_shell> 
+icc2_shell> file mkdir $REPORT_DIR
+icc2_shell> file mkdir $OUTPUT_DIR
+icc2_shell> 
+icc2_shell> # ============================================================ #
+icc2_shell> # ==================== Open Design =========================== #
+icc2_shell> # ============================================================ #
+icc2_shell> # Remove any stale lock from a previous interrupted session
+icc2_shell> set lock_file "${DLIB_NAME}/${IN_BLOCK}/design.ndm.lock"
+./2_design_library/neural_eq.dlib/neural_eq_top_init/design.ndm.lock
+icc2_shell> 
+? ? ? 
+icc2_shell> if {[file exists $lock_file]} {
+    sh rm -f $lock_file
+    puts "INFO: Removed stale lock file."
+}
+icc2_shell> 
+icc2_shell> open_lib  $DLIB_NAME
+Information: Loading library file '/home/ICer/Desktop/Graduation_Project/pnr/2_design_library/neural_eq.dlib' (FILE-007)
+Information: Loading library file '/home/ICer/Desktop/Graduation_Project/pnr/2_design_library/1_ndm/saed90nm_max.ndm' (FILE-007)
+{neural_eq.dlib}
+icc2_shell> open_block ${IN_BLOCK}.design
+Information: User units loaded from library 'saed90nm_max' (LNK-040)
+Opening block 'neural_eq.dlib:neural_eq_top_init.design' in edit mode
+{neural_eq.dlib:neural_eq_top_init.design}
+icc2_shell> 
+? ? 
+icc2_shell> copy_block     -from_block ${DLIB_NAME}:${IN_BLOCK}.design     -to_block   $OUT_BLOCK
+{neural_eq.dlib:neural_eq_top_fp.design}
+icc2_shell> 
+icc2_shell> current_block ${OUT_BLOCK}.design
+{neural_eq.dlib:neural_eq_top_fp.design}
+icc2_shell> # Cap M8 as the max routing  keep M9 for power straps only.layer
+icc2_shell> 
+icc2_shell> set_attribute [get_layers {M1 M3 M5 M7 M9}] routing_direction vertical
+Information: The design specific attribute override for layer 'M1' is set in the current block 'neural_eq_top_fp', because the actual library setting may not be overwritten. (ATTR-12)
+Information: The design specific attribute override for layer 'M3' is set in the current block 'neural_eq_top_fp', because the actual library setting may not be overwritten. (ATTR-12)
+Information: The design specific attribute override for layer 'M5' is set in the current block 'neural_eq_top_fp', because the actual library setting may not be overwritten. (ATTR-12)
+Information: The design specific attribute override for layer 'M7' is set in the current block 'neural_eq_top_fp', because the actual library setting may not be overwritten. (ATTR-12)
+Information: The design specific attribute override for layer 'M9' is set in the current block 'neural_eq_top_fp', because the actual library setting may not be overwritten. (ATTR-12)
+{M1 M3 M5 M7 M9}
+icc2_shell> set_attribute [get_layers {M2 M4 M6 M8}]    routing_direction horizontal
+Information: The design specific attribute override for layer 'M2' is set in the current block 'neural_eq_top_fp', because the actual library setting may not be overwritten. (ATTR-12)
+Information: The design specific attribute override for layer 'M4' is set in the current block 'neural_eq_top_fp', because the actual library setting may not be overwritten. (ATTR-12)
+Information: The design specific attribute override for layer 'M6' is set in the current block 'neural_eq_top_fp', because the actual library setting may not be overwritten. (ATTR-12)
+Information: The design specific attribute override for layer 'M8' is set in the current block 'neural_eq_top_fp', because the actual library setting may not be overwritten. (ATTR-12)
+{M2 M4 M6 M8}
+icc2_shell> 
+icc2_shell> # Track offsets (SAED 90nm minimum pitch discipline)
+icc2_shell> set_attribute [get_layers M1] track_offset 0.03
+Information: The design specific attribute override for layer 'M1' is set in the current block 'neural_eq_top_fp', because the actual library setting may not be overwritten. (ATTR-12)
+{M1}
+icc2_shell> set_attribute [get_layers M2] track_offset 0.04
+Information: The design specific attribute override for layer 'M2' is set in the current block 'neural_eq_top_fp', because the actual library setting may not be overwritten. (ATTR-12)
+{M2}
+icc2_shell> 
+icc2_shell> # Ignore M9 for signal routing; use only M1-M8
+icc2_shell> set_ignored_layers -max_routing_layer M8
+Using libraries: neural_eq.dlib saed90nm_max
+Warning: In library neural_eq.dlib, no block views exist for block neural_eq_top. (LNK-064)
+Visiting block neural_eq.dlib:neural_eq_top_fp.design
+Design 'neural_eq_top' was successfully linked.
+1
+icc2_shell> start_gui
+Begin building search trees for block neural_eq.dlib:neural_eq_top_fp.design
+Done building search trees for block neural_eq.dlib:neural_eq_top_fp.design (time 0s)
+icc2_shell> set site_name [get_site_defs]
+{unit}
+icc2_shell> set_attribute [get_site_defs $site_name] is_default true
+{unit}
+icc2_shell> set_attribute [get_site_defs $site_name] symmetry {Y}
+{unit}
+icc2_shell> initialize_floorplan     -core_utilization  0.55     -shape             R        -orientation       N        -core_offset       {60 60 60 60}     -flip_first_row    false     -side_ratio        {1 1}
+Removing existing floorplan objects
+Creating core...
+Core utilization ratio = 55.50%
+Unplacing all cells...
+Creating site array...
+Creating routing tracks...
+Initializing floorplan completed.
+icc2_shell> set_block_pin_constraints     -allowed_layers    {M3}     -sides             {1}
+1
+icc2_shell> place_pins -ports [get_ports {in_I in_Q valid_in}]
+
+Min routing layer: M1
+Max routing layer: M8
+
+
+Number of block ports: 68
+Number of block pin locations assigned from router: 0
+Number of PG ports on blocks: 0
+Number of pins created: 33
+CPU Time for Pin Placement: 00:00:00.02u 00:00:00.00s 00:00:00.02e: 
+Total Pin Placement CPU Time: 00:00:00.03u 00:00:00.00s 00:00:00.03e: 
+1
+icc2_shell> # --- Data Outputs on RIGHT (M3, side 3)
+icc2_shell> set_block_pin_constraints     -allowed_layers    {M3}     -sides             {3}
+1
+icc2_shell> place_pins -ports [get_ports {out_I out_Q valid_out}]
+
+Min routing layer: M1
+Max routing layer: M8
+
+
+Number of block ports: 68
+Number of block pin locations assigned from router: 0
+Number of PG ports on blocks: 0
+Number of pins created: 33
+CPU Time for Pin Placement: 00:00:00.02u 00:00:00.00s 00:00:00.02e: 
+Total Pin Placement CPU Time: 00:00:00.02u 00:00:00.00s 00:00:00.02e: 
+1
+icc2_shell> # --- Clock on BOTTOM (M4, side  feeds CTS spine2)
+icc2_shell> set_block_pin_constraints     -allowed_layers    {M4}     -sides             {2}      -corner_keepout_num_tracks 2
+1
+icc2_shell> place_pins -ports [get_ports {clk}]
+
+Min routing layer: M1
+Max routing layer: M8
+
+
+Number of block ports: 68
+Number of block pin locations assigned from router: 0
+Number of PG ports on blocks: 0
+Number of pins created: 1
+CPU Time for Pin Placement: 00:00:00.00u 00:00:00.00s 00:00:00.00e: 
+Total Pin Placement CPU Time: 00:00:00.01u 00:00:00.00s 00:00:00.01e: 
+1
+icc2_shell> # --- Reset on TOP (M4, side  false path, any convenient side4)
+icc2_shell> set_block_pin_constraints     -allowed_layers    {M4}     -sides             {4}      -corner_keepout_num_tracks 2
+1
+icc2_shell> place_pins -ports [get_ports {rst_n}]
+
+Min routing layer: M1
+Max routing layer: M8
+
+
+Number of block ports: 68
+Number of block pin locations assigned from router: 0
+Number of PG ports on blocks: 0
+Number of pins created: 1
+CPU Time for Pin Placement: 00:00:00.00u 00:00:00.00s 00:00:00.00e: 
+Total Pin Placement CPU Time: 00:00:00.01u 00:00:00.00s 00:00:00.01e: 
+1
+icc2_shell> remove_placement_blockages -all
+0
+icc2_shell> remove_placement_blockages -all
+0
+icc2_shell> create_placement_blockage     -name   corner_BL     -type   hard     -boundary {{0 0} {15 15}}
+{corner_BL}
+icc2_shell> create_placement_blockage     -name   corner_BR     -type   hard     -boundary {{[expr [get_attribute [current_block] boundary_bbox_ur_x] - 15] 0}                {[get_attribute [current_block] boundary_bbox_ur_x] 15}}
+Error: Invalid coordinates '[expr [get_attribute [current_block] boundary_bbox_ur_x] - 15] 0' in list. (NDMUI-100)
+Error: Empty or invalid geometry specified for the '-boundary' argument of the command. (NDMUI-337)
+Error: problem in create_placement_blockage
+        Use error_info for more info. (CMD-013)
+icc2_shell> create_placement_blockage     -name   corner_TL     -type   hard     -boundary {{0 [expr [get_attribute [current_block] boundary_bbox_ur_y] - 15]}                {15 [get_attribute [current_block] boundary_bbox_ur_y]}}
+Error: Invalid coordinates '0 [expr [get_attribute [current_block] boundary_bbox_ur_y] - 15]' in list. (NDMUI-100)
+Error: Empty or invalid geometry specified for the '-boundary' argument of the command. (NDMUI-337)
+Error: problem in create_placement_blockage
+        Use error_info for more info. (CMD-013)
+icc2_shell> create_placement_blockage     -name   corner_TR     -type   hard     -boundary {{[expr [get_attribute [current_block] boundary_bbox_ur_x] - 15]                 [expr [get_attribute [current_block] boundary_bbox_ur_y] - 15]}                {[get_attribute [current_block] boundary_bbox_ur_x]                 [get_attribute [current_block] boundary_bbox_ur_y]}}
+Error: Invalid coordinates '[expr [get_attribute [current_block] boundary_bbox_ur_x] - 15]                 [expr [get_attribute [current_block] boundary_bbox_ur_y] - 15]' in list. (NDMUI-100)
+Error: Empty or invalid geometry specified for the '-boundary' argument of the command. (NDMUI-337)
+Error: problem in create_placement_blockage
+        Use error_info for more info. (CMD-013)
+icc2_shell> create_placement_blockage     -name   corner_BL     -type   hard     -boundary {{0 0} {15 15}}
+Error: 
+        Placement blockage 'corner_BL' already exists (NDM-003)
+Error: problem in create_placement_blockage
+        Use error_info for more info. (CMD-013)
+icc2_shell> remove_placement_blockages -all
+1
+icc2_shell> create_placement_blockage     -name   corner_BL     -type   hard     -boundary {{0 0} {15 15}}
+{corner_BL}
+icc2_shell> remove_placement_blockages -all
+1
+icc2_shell> create_placement_blockage     -name   corner_BL     -type   hard     -boundary {{0 0} {15 15}}
+{corner_BL}
+icc2_shell> create_placement_blockage     -name   corner_BR     -type   hard     -boundary {{[expr [get_attribute [current_block] boundary_bbox_ur_x] - 15] 0}                {[get_attribute [current_block] boundary_bbox_ur_x] 15}}
+Error: Invalid coordinates '[expr [get_attribute [current_block] boundary_bbox_ur_x] - 15] 0' in list. (NDMUI-100)
+Error: Empty or invalid geometry specified for the '-boundary' argument of the command. (NDMUI-337)
+Error: problem in create_placement_blockage
+        Use error_info for more info. (CMD-013)
+icc2_shell> remove_placement_blockages -all
+1
+icc2_shell> remove_placement_blockages -all
+0
+icc2_shell> set DIE_URX [get_attribute [current_block] boundary_bbox_ur_x]
+Warning: Attribute 'boundary_bbox_ur_x' has not been defined for the block object class. (ATTR-1)
+icc2_shell> set DIE_URY [get_attribute [current_block] boundary_bbox_ur_y]
+Warning: Attribute 'boundary_bbox_ur_y' has not been defined for the block object class. (ATTR-1)
+icc2_shell> set CORNER  15
+15
+icc2_shell> # Now compute the corner coordinates
+icc2_shell> set BR_X1 [expr {$DIE_URX - $CORNER}]
+Error: can't use empty string as operand of "-"
+        Use error_info for more info. (CMD-013)
+icc2_shell> set TL_Y1 [expr {$DIE_URY - $CORNER}]
+Error: can't use empty string as operand of "-"
+        Use error_info for more info. (CMD-013)
+icc2_shell> set CORNER  15
+15
+icc2_shell> set BR_X1   [expr {$DIE_URX - $CORNER}]
+Error: can't use empty string as operand of "-"
+        Use error_info for more info. (CMD-013)
+icc2_shell> set TL_Y1   [expr {$DIE_URY - $CORNER}]
+Error: can't use empty string as operand of "-"
+        Use error_info for more info. (CMD-013)
+icc2_shell> # Bottom-Left
+icc2_shell> create_placement_blockage -name corner_BL -type hard     -boundary [list [list 0 0] [list $CORNER $CORNER]]
+{corner_BL}
+icc2_shell> # Bottom-Right
+icc2_shell> create_placement_blockage -name corner_BR -type hard     -boundary [list [list $BR_X1 0] [list $DIE_URX $CORNER]]
+Error: can't read "BR_X1": no such variable
+        Use error_info for more info. (CMD-013)
+icc2_shell> # Top-Left
+icc2_shell> create_placement_blockage -name corner_TL -type hard     -boundary [list [list 0 $TL_Y1] [list $CORNER $DIE_URY]]
+Error: can't read "TL_Y1": no such variable
+        Use error_info for more info. (CMD-013)
+icc2_shell> # Top-Right
+icc2_shell> create_placement_blockage -name corner_TR -type hard     -boundary [list [list $BR_X1 $TL_Y1] [list $DIE_URX $DIE_URY]]
+Error: can't read "BR_X1": no such variable
+        Use error_info for more info. (CMD-013)
+icc2_shell> remove_placement_blockages -all
+1
+icc2_shell> set CORNER  15
+15
+icc2_shell> set BR_X1   [expr {$DIE_URX - $CORNER}]
+Error: can't use empty string as operand of "-"
+        Use error_info for more info. (CMD-013)
+icc2_shell> set TL_Y1   [expr {$DIE_URY - $CORNER}]
+Error: can't use empty string as operand of "-"
+        Use error_info for more info. (CMD-013)
+icc2_shell> # Bottom-Left
+icc2_shell> create_placement_blockage -name corner_BL -type hard     -boundary [list [list 0 0] [list $CORNER $CORNER]]
+{corner_BL}
+icc2_shell> # Bottom-Right
+icc2_shell> create_placement_blockage -name corner_BR -type hard     -boundary [list [list $BR_X1 0] [list $DIE_URX $CORNER]]
+Error: can't read "BR_X1": no such variable
+        Use error_info for more info. (CMD-013)
+icc2_shell> # Top-Left
+icc2_shell> create_placement_blockage -name corner_TL -type hard     -boundary [list [list 0 $TL_Y1] [list $CORNER $DIE_URY]]
+Error: can't read "TL_Y1": no such variable
+        Use error_info for more info. (CMD-013)
+icc2_shell> # Top-Right
+icc2_shell> create_placement_blockage -name corner_TR -type hard     -boundary [list [list $BR_X1 $TL_Y1] [list $DIE_URX $DIE_URY]]
+Error: can't read "BR_X1": no such variable
+        Use error_info for more info. (CMD-013)
+icc2_shell> remove_placement_blockages -all
+1
+icc2_shell> set bbox [get_attribute [current_block] bbox]
+{-11.2000 -0.0800} {456.6400 454.0800}
+icc2_shell> puts "Die bbox = $bbox"
+Die bbox = {-11.2000 -0.0800} {456.6400 454.0800}
+icc2_shell> set DIE_LLX [lindex [lindex $bbox 0] 0]
+-11.2000
+icc2_shell> set DIE_LLY [lindex [lindex $bbox 0] 1]
+-0.0800
+icc2_shell> set DIE_URX [lindex [lindex $bbox 1] 0]
+456.6400
+icc2_shell> set DIE_URY [lindex [lindex $bbox 1] 1]
+454.0800
+icc2_shell> puts "URX = $DIE_URX   URY = $DIE_URY"
+URX = 456.6400   URY = 454.0800
+icc2_shell> set CORNER  15
+15
+icc2_shell> set BR_X1   [expr {$DIE_URX - $CORNER}]
+441.64
+icc2_shell> set TL_Y1   [expr {$DIE_URY - $CORNER}]
+439.08
+icc2_shell> # Bottom-Left
+icc2_shell> create_placement_blockage -name corner_BL -type hard     -boundary [list [list 0 0] [list $CORNER $CORNER]]
+{corner_BL}
+icc2_shell> # Bottom-Right
+icc2_shell> create_placement_blockage -name corner_BR -type hard     -boundary [list [list $BR_X1 0] [list $DIE_URX $CORNER]]
+{corner_BR}
+icc2_shell> # Top-Left
+icc2_shell> create_placement_blockage -name corner_TL -type hard     -boundary [list [list 0 $TL_Y1] [list $CORNER $DIE_URY]]
+{corner_TL}
+icc2_shell> # Top-Right
+icc2_shell> create_placement_blockage -name corner_TR -type hard     -boundary [list [list $BR_X1 $TL_Y1] [list $DIE_URX $DIE_URY]]
+{corner_TR}
+icc2_shell> set LEFT_X2  20
+20
+icc2_shell> set RIGHT_X1 [expr {$DIE_URX - 20}]
+436.64
+icc2_shell> set SIDE_Y1  $CORNER
+15
+icc2_shell> set SIDE_Y2  [expr {$DIE_URY - $CORNER}]
+439.08
+icc2_shell> # Left IO buffer zone
+icc2_shell> create_placement_blockage     -name               left_io_buf     -type               partial     -blocked_percentage 60     -boundary [list [list 0 $SIDE_Y1] [list $LEFT_X2 $SIDE_Y2]]
+{left_io_buf}
+icc2_shell> # Right IO buffer zone
+icc2_shell> create_placement_blockage     -name               right_io_buf     -type               partial     -blocked_percentage 60     -boundary [list [list $RIGHT_X1 $SIDE_Y1] [list $DIE_URX $SIDE_Y2]]
+{right_io_buf}
+icc2_shell> create_tap_cells     -lib_cell saed90nm_max/DCAP     -pattern  every_other_row      -distance 10
+Warning: Routing direction of metal layer PO is neither "horizontal" nor "vertical".  PDC checks will not be performed on this layer. (PDC-003)
+PDC app_options settings =========
+        place.legalize.enable_prerouted_net_check: 1
+        place.legalize.num_tracks_for_access_check: 1
+        place.legalize.use_eol_spacing_for_access_check: 0
+        place.legalize.allow_touch_track_for_access_check: 1
+        place.legalize.reduce_conservatism_in_eol_check: 0
+        place.legalize.preroute_shape_merge_distance: 0.0
+        place.legalize.enable_non_preferred_direction_span_check: 0
+
+Layer M1: cached 0 shapes out of 0 total shapes.
+Cached 0 vias out of 0 total vias.
+Information: Starting tap cell insertion into neural_eq_top_fp using site master "unit". (CHF-200)
+        20% complete ...
+        30% complete ...
+        50% complete ...
+        60% complete ...
+        70% complete ...
+        80% complete ...
+Information: Total 2006 tap cells inserted successfully into neural_eq_top_fp. (CHF-100)
+icc2_shell> report_ports  [all_inputs]  > ${REPORT_DIR}/fp_input_ports.rpt
+icc2_shell> report_ports  [all_outputs] > ${REPORT_DIR}/fp_output_ports.rpt
+icc2_shell> report_cell                 > ${REPORT_DIR}/fp_cells.rpt
+icc2_shell> report_nets                 > ${REPORT_DIR}/fp_nets.rpt
+icc2_shell> report_qor                  > ${REPORT_DIR}/fp_qor.rpt
+icc2_shell> report_utilization          > ${REPORT_DIR}/fp_utilization.rpt
+icc2_shell> get_placement_blockages     > ${REPORT_DIR}/fp_blockages.rpt
+icc2_shell> write_def    ${OUTPUT_DIR}/${DESIGN_NAME}_fp.def
+****************************************
+Report : Data Mismatches
+Version: O-2018.06-SP1
+Date   : Wed Apr 29 17:38:50 2026
+****************************************
+No mismatches exist on the design.
+---------------------------------------
+Number of Written DEF Constructs
+---------------------------------------
+VERSION                        : 1
+DIVIDERCHAR                    : 1
+BUSBITCHARS                    : 1
+DESIGN                         : 1
+UNITS                          : 1
+PROPERTYDEFINITIONS            : 1
+DIEAREA                        : 1
+ROW                            : 116
+TRACKS                         : 18
+COMPONENTS                     : 5617
+PINS                           : 68
+PINPROPERTIES                  : 68
+BLOCKAGES                      : 6
+NETS                           : 3685
+1
+icc2_shell> write_verilog -include {all} ${OUTPUT_DIR}/${DESIGN_NAME}_fp.v
+1
+icc2_shell> write_sdc    -output ${OUTPUT_DIR}/${DESIGN_NAME}_fp.sdc
+1
+icc2_shell> # ============================================================ #
+icc2_shell> # ===================== Save Block =========================== #
+icc2_shell> # ============================================================ #
+icc2_shell> save_block
+Information: Saving block 'neural_eq.dlib:neural_eq_top_fp.design'
+1
+icc2_shell> 

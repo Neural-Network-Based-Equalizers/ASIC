@@ -1,0 +1,117 @@
+# ============================================================ #
+# =================== NDM Library Creation =================== #
+# ============================================================ #
+# Project  : Neural Network Equalizer
+# Top Cell : neural_eq_top
+# Tool     : IC Compiler II (icc2_shell)
+# Process  : SAED 90nm
+# Usage    : icc2_shell -f create_ndm.tcl
+# ============================================================ #
+
+# ======================================================= #
+# ==================== Path Variables =================== #
+# ======================================================= #
+set COMMON_PATH      "/home/ICer/Downloads/Lib"
+set STD_CELL_PATH    "$COMMON_PATH/synopsys/models"
+set TECH_FILE_PATH   "$COMMON_PATH/process/astro/tech/astroTechFile.tf"
+set LEF_FILE         "$COMMON_PATH/lef/saed90nmEditted.lef"
+set TLU_PATH         "$COMMON_PATH/Technology_Kit/starrcxt"
+
+# ======================================================= #
+# =================== Library Variables ================= #
+# ======================================================= #
+set DB_WORST_CASE    "saed90nm_max.db"
+set LIBNAME          "saed90nm_max"
+set NDM_OUTPUT_DIR   "./1_ndm"
+set NDM_OUTPUT_NAME  "${LIBNAME}.ndm"
+
+# ======================================================= #
+# ================== Create Output Dir ================= #
+# ======================================================= #
+file mkdir $NDM_OUTPUT_DIR
+
+# ======================================================= #
+# ================= Create Workspace =================== #
+# ======================================================= #
+# Creates a library workspace in exploration mode.
+# The technology file defines the metal stack and design rules
+# for the SAED 90nm process used by neural_eq_top.
+
+create_workspace \
+    -flow      exploration \
+    -technology $TECH_FILE_PATH \
+    $LIBNAME
+
+# ======================================================= #
+# ==================== Read DB Files =================== #
+# ======================================================= #
+# Load timing/logic library (worst-case corner) for the
+# standard cells used after synthesis of neural_eq_top.
+
+read_db ${STD_CELL_PATH}/${DB_WORST_CASE}
+
+# ======================================================= #
+# ==================== Read LEF File =================== #
+# ======================================================= #
+# Load physical abstract views (cell dimensions, pin locations,
+# obstruction layers) required by ICC2 place-and-route.
+
+read_lef ${LEF_FILE}
+
+# ======================================================= #
+# ================ TLU+ Parasitics Files =============== #
+# ======================================================= #
+# TLU+ models capture the RC parasitics of the SAED 90nm
+# metal stack. Both corners are registered so ICC2 can run
+# both setup (maxTLU) and hold (minTLU) timing analysis
+# during the neural_eq_top PnR flow.
+
+read_parasitic_tech \
+    -layermap  ${TLU_PATH}/tech2itf.map \
+    -tlup      ${TLU_PATH}/tluplus/saed90nm_1p9m_1t_Cmax.tluplus \
+    -name      maxTLU
+
+read_parasitic_tech \
+    -layermap  ${TLU_PATH}/tech2itf.map \
+    -tlup      ${TLU_PATH}/tluplus/saed90nm_1p9m_1t_Cmin.tluplus \
+    -name      minTLU
+
+# ======================================================= #
+# ================= Workspace App Options ============== #
+# ======================================================= #
+# Keep all physical cells (fillers, tap, endcap) in the NDM.
+# Save both design views and layout views so that the ICC2
+# PnR flow for neural_eq_top has access to all cell data.
+
+set_app_options -list {lib.workspace.keep_all_physical_cells true}
+set_app_options -list {lib.workspace.save_design_views       true}
+set_app_options -list {lib.workspace.save_layout_views       true}
+set_app_options -list {design.enable_lib_cell_editing        mutable}
+
+# ======================================================= #
+# ================== Group Libraries =================== #
+# ======================================================= #
+# Analyzes and groups the logic and physical source libraries
+# in exploration mode to produce a consistent NDM.
+
+group_libs
+
+# ======================================================= #
+# ============= Process & Commit Workspace ============= #
+# ======================================================= #
+# Saves the workspace to disk as a compiled NDM library.
+# This NDM will be referenced by the dlib setup script.
+
+process_workspaces \
+    -directory $NDM_OUTPUT_DIR \
+    -output    $LIBNAME
+
+puts ""
+puts "============================================================"
+puts " NDM created successfully:"
+puts "   ${NDM_OUTPUT_DIR}/${NDM_OUTPUT_NAME}"
+puts " Use this path as reference_library in create_dlib.tcl"
+puts "============================================================"
+puts ""
+
+quit
