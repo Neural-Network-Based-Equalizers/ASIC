@@ -1,16 +1,4 @@
-`include "input_window_ctrl.sv"
-`include "layer1_compute.sv"
-`include "layer2_compute.sv"
-`include "layer3_compute.sv"
-`include "Mux2x1.sv"
-`include "rom_L1_b.sv"
-`include "rom_L2_b.sv"
-`include "rom_L3_b.sv"
-`include "rom_L1_W.sv"
-`include "rom_L2A_W.sv"
-`include "rom_L2B_W.sv"
-`include "rom_L3A_W.sv"
-`include "rom_L3B_W.sv"
+`timescale 1ns / 1ps
 
 module neural_eq_top (
     // input  logic clk, rst_n,

@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module input_window_ctrl (
     input  logic clk, rst_n,
     input  logic valid_in,
@@ -11,7 +13,7 @@ module input_window_ctrl (
     localparam int TIMEOUT_CYCLES = 50;
 
     logic [2:0] fill_cnt;
-    logic [2:0] flush_cnt;
+    logic [3:0] flush_cnt;
     logic [7:0] silence_timer;
     logic flushing_active;
 
@@ -39,12 +41,14 @@ module input_window_ctrl (
                 end else valid_out <= 1; // Pulse ONCE per symbol
             end 
             else if (flushing_active) begin
-                if (flush_cnt == 0 || flush_cnt == 6) begin
+                // Two flush pulses spaced 8 clocks apart to match the
+                // 7-tick synchronous-ROM pipeline minimum period.
+                if (flush_cnt == 0 || flush_cnt == 8) begin
                     for (int i=0; i<4; i++) begin win_I[i] <= win_I[i+1]; win_Q[i] <= win_Q[i+1]; end
                     win_I[4] <= INIT_VAL; win_Q[4] <= INIT_VAL;
                     valid_out <= 1; 
                 end
-                if (flush_cnt < 7)
+                if (flush_cnt < 9)
                     flush_cnt <= flush_cnt + 1;
                 else
                     flushing_active <= 0;

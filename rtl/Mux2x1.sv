@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 // Verilog project: Verilog code for 16-bit MIPS Processor
 // Verilog code for 16 bit single cycle MIPS CPU  
 module Mux2x1 (
