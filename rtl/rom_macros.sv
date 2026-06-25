@@ -28,8 +28,6 @@
 //                 1-cycle synchronous read:
 //                   addr presented at clock T → dout valid at clock T+1
 // =============================================================================
-`timescale 1ns / 1ps
-
 // -----------------------------------------------------------------------------
 // MINI_W_ROM_4x48
 // 4-entry × 48-bit weight ROM — used by Layer 1 (4 MAC cycles per neuron).

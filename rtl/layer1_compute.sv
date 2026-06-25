@@ -13,7 +13,6 @@
 //                 tick=2 : dout valid, accumulation begins
 //                 tick=5 : final accumulate + ReLU + output register + fire
 // =============================================================================
-`timescale 1ns / 1ps
 import rom_data_pkg::*;
 
 module layer1_compute (

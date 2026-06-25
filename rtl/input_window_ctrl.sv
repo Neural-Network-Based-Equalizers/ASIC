@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module input_window_ctrl (
     input  logic clk, rst_n,
     input  logic valid_in,

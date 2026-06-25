@@ -1,4 +1,10 @@
-`timescale 1ns / 1ps
+`include "rom_data_pkg.sv"
+`include "rom_macros.sv"
+`include "Mux2x1.sv"
+`include "input_window_ctrl.sv"
+`include "layer1_compute.sv"
+`include "layer2_compute.sv"
+`include "layer3_compute.sv"
 
 module neural_eq_top (
     // input  logic clk, rst_n,

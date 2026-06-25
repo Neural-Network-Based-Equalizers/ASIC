@@ -14,7 +14,6 @@
 //                 tick=7 : final accumulate + clamp + output register + fire
 //               Layer 3 uses linear activation (no ReLU).
 // =============================================================================
-`timescale 1ns / 1ps
 import rom_data_pkg::*;
 
 module layer3_compute (
