@@ -13,6 +13,7 @@
 //                 tick=2 : dout valid, accumulation begins
 //                 tick=5 : final accumulate + ReLU + output register + fire
 // =============================================================================
+
 import rom_data_pkg::*;
 
 module layer1_compute (
@@ -30,7 +31,7 @@ module layer1_compute (
     logic l1_busy;
 
     // =========================================================================
-    // FSM: tick=1 (ROM fetch) -> tick=2..5 (accumulate) -> fire on tick=5
+    // FSM: tick=1 (ROM fetch) -> tick=2 (multiply) -> tick=3..6 (accumulate) -> fire on tick=7
     // =========================================================================
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -44,7 +45,7 @@ module layer1_compute (
                     l1_latched_Q[i] <= win_Q[i];
                 end
             end else if (l1_busy) begin
-                if (l1_tick == 5) begin
+                if (l1_tick == 7) begin
                     l1_busy <= 0; valid_out <= 1;
                 end else begin
                     l1_tick <= l1_tick + 1;
@@ -113,26 +114,34 @@ module layer1_compute (
             assign p2 = l1_in2 * $signed(w_bus_sync[31:16]);
             assign p3 = l1_in3 * $signed(w_bus_sync[15:0]);
 
-            // Accumulate from tick=2 (tick=1 is the fetch cycle)
+            // Register partial products to break critical path
+            logic signed [31:0] p1_reg, p2_reg, p3_reg;
+            always_ff @(posedge clk or negedge rst_n) begin
+                if (!rst_n) begin
+                    p1_reg <= 0; p2_reg <= 0; p3_reg <= 0;
+                end else if (l1_busy) begin
+                    p1_reg <= p1; p2_reg <= p2; p3_reg <= p3;
+                end
+            end
+
+            // Accumulate from tick=3 (tick=1 fetch, tick=2 multiply, tick=3 accumulate)
             logic signed [39:0] acc;
             always_ff @(posedge clk or negedge rst_n) begin
                 if (!rst_n)
                     acc <= 0;
                 else if (valid_in && !l1_busy)
                     acc <= 0;
-                else if (l1_busy && l1_tick >= 2)
-                    acc <= (p1 + p2) + (p3 + acc);
+                else if (l1_busy && l1_tick >= 3 && l1_tick <= 6)
+                    acc <= (p1_reg + p2_reg) + (p3_reg + acc);
             end
 
-            // Fire at tick=5: acc holds groups 0..2, p1/p2/p3 = group3
+            // Fire at tick=7: acc holds groups 0..3 sum
             always_ff @(posedge clk or negedge rst_n) begin
                 if (!rst_n) begin
                     l1_out[i] <= 0;
-                end else if (l1_busy && l1_tick == 5) begin
-                    logic signed [39:0] final_acc;
+                end else if (l1_busy && l1_tick == 7) begin
                     logic signed [39:0] tmp;
-                    final_acc = (p1 + p2) + (p3 + acc);
-                    tmp = (final_acc >>> 14) + bias_val;
+                    tmp = (acc >>> 14) + bias_val;
                     if (tmp < 0) tmp = 0; // ReLU
                     if      (tmp > 32767)  l1_out[i] <= 32767;
                     else if (tmp < -32768) l1_out[i] <= -32768;

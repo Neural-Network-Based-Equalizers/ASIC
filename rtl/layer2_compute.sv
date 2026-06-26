@@ -13,6 +13,7 @@
 //                 tick=2 : dout valid, accumulation begins
 //                 tick=7 : final accumulate + ReLU + output register + fire
 // =============================================================================
+
 import rom_data_pkg::*;
 
 module layer2_compute (
@@ -23,13 +24,13 @@ module layer2_compute (
     output logic valid_out
 );
     
-    logic [2:0] l2_tick;
+    logic [3:0] l2_tick;
     logic l2_busy;
     logic signed [15:0] l2_latched_in [0:31];
     logic signed [15:0] l2_out_reg    [0:31];
 
     // =========================================================================
-    // FSM: tick=1 (ROM fetch) -> tick=2..7 (accumulate) -> fire on tick=7
+    // FSM: tick=1 (ROM fetch) -> tick=2 (multiply) -> tick=3..8 (accumulate) -> fire on tick=9
     // =========================================================================
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -40,7 +41,7 @@ module layer2_compute (
                 l2_busy <= 1; l2_tick <= 1;
                 for (int i = 0; i < 32; i++) l2_latched_in[i] <= l1_out[i];
             end else if (l2_busy) begin
-                if (l2_tick == 7) begin
+                if (l2_tick == 9) begin
                     valid_out <= 1;
                     if (valid_in) begin
                         l2_tick <= 1;
@@ -132,31 +133,41 @@ module layer2_compute (
             assign p5 = l2b_in2 * $signed(w_bus_b[31:16]);
             assign p6 = l2b_in3 * $signed(w_bus_b[15:0]);
 
-            // Accumulate from tick=2 (tick=1 is the fetch cycle)
+            // Register partial products to break critical path
+            logic signed [31:0] p1_reg, p2_reg, p3_reg, p4_reg, p5_reg, p6_reg;
+            always_ff @(posedge clk or negedge rst_n) begin
+                if (!rst_n) begin
+                    p1_reg <= 0; p2_reg <= 0; p3_reg <= 0;
+                    p4_reg <= 0; p5_reg <= 0; p6_reg <= 0;
+                end else if (l2_busy) begin
+                    p1_reg <= p1; p2_reg <= p2; p3_reg <= p3;
+                    p4_reg <= p4; p5_reg <= p5; p6_reg <= p6;
+                end
+            end
+
+            // Accumulate from tick=3 (tick=1 fetch, tick=2 multiply, tick=3 accumulate)
             logic signed [39:0] acc;
             always_ff @(posedge clk or negedge rst_n) begin
                 if (!rst_n)
                     acc <= 0;
                 else if (valid_in && !l2_busy)
                     acc <= 0;
-                else if (l2_busy && l2_tick == 7 && valid_in)
+                else if (l2_busy && l2_tick == 9 && valid_in)
                     acc <= 0; // Clear for back-to-back next transaction
-                else if (l2_busy && l2_tick >= 2)
-                    acc <= acc + (p1+p2) + (p3+p4) + (p5+p6);
+                else if (l2_busy && l2_tick >= 3 && l2_tick <= 8)
+                    acc <= acc + (p1_reg+p2_reg) + (p3_reg+p4_reg) + (p5_reg+p6_reg);
             end
 
-            // Fire at tick=7
-            logic signed [39:0] final_acc;
-            logic signed [39:0] tmp;
-            logic signed [39:0] tmp_relu;
-            assign final_acc = acc + (p1+p2) + (p3+p4) + (p5+p6);
-            assign tmp       = (final_acc >>> 14) + bias_val;
-            assign tmp_relu  = (tmp < 0) ? 40'sd0 : tmp;
-
+            // Fire at tick=9
             always_ff @(posedge clk or negedge rst_n) begin
                 if (!rst_n)
                     l2_out_reg[i] <= 0;
-                else if (l2_busy && l2_tick == 7) begin
+                else if (l2_busy && l2_tick == 9) begin
+                    logic signed [39:0] tmp;
+                    logic signed [39:0] tmp_relu;
+                    tmp       = (acc >>> 14) + bias_val;
+                    tmp_relu  = (tmp < 0) ? 40'sd0 : tmp;
+                    
                     if      (tmp_relu > 32767)  l2_out_reg[i] <= 32767;
                     else if (tmp_relu < -32768) l2_out_reg[i] <= -32768;
                     else                        l2_out_reg[i] <= tmp_relu[15:0];
