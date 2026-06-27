@@ -54,11 +54,11 @@ source ../cons/cons.tcl
 set_fix_multiple_port_nets -all -buffer_constants 
 link
 
-compile -map_effort high
+compile_ultra
+# compile -map_effort high
 report_timing -max_paths 20 > ../report/synth_timing_before_optimize.rpt 
 
 compile -top  
-#compile_ultra
 report_timing -max_paths 20 > ../report/synth_timing_after_optimize.rpt 
 
 

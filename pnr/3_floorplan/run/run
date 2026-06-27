@@ -1,0 +1,4 @@
+rm -rf ../log/* ../report/* ../output/*
+mkdir -p ../log ../report ../output
+icc2_shell -f ../script/floorplan.tcl | tee ../log/floorplan.log
+rm -rf command.log filenames.log

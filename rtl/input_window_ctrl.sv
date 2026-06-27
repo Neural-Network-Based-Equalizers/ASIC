@@ -24,33 +24,46 @@ module input_window_ctrl (
         end else begin
             valid_out <= 0; // Default: Pulse Low
 
-            if (valid_in) silence_timer <= 0;
-            else if (fill_cnt >= 3 && !flushing_active && flush_cnt == 0) begin
-                if (silence_timer < TIMEOUT_CYCLES) silence_timer <= silence_timer + 1;
-                else flushing_active <= 1;
-            end
-
             if (valid_in) begin
+                silence_timer <= 0;
+                flushing_active <= 0;
+                flush_cnt <= 0;
+
                 for (int i=0; i<4; i++) begin win_I[i] <= win_I[i+1]; win_Q[i] <= win_Q[i+1]; end
                 win_I[4] <= in_I; win_Q[4] <= in_Q;
 
-                if (fill_cnt < 3) begin
+                if (flushing_active) begin
+                    fill_cnt <= 1; // Interrupted flush, start new packet
+                end else if (fill_cnt < 3) begin
                     fill_cnt <= fill_cnt + 1;
                     if (fill_cnt == 2) valid_out <= 1; // Pulse ONCE on 3rd symbol
-                end else valid_out <= 1; // Pulse ONCE per symbol
-            end 
-            else if (flushing_active) begin
-                // Two flush pulses spaced 10 clocks apart to match the
-                // 9-tick synchronous-ROM pipeline minimum period.
-                if (flush_cnt == 0 || flush_cnt == 10) begin
-                    for (int i=0; i<4; i++) begin win_I[i] <= win_I[i+1]; win_Q[i] <= win_Q[i+1]; end
-                    win_I[4] <= INIT_VAL; win_Q[4] <= INIT_VAL;
-                    valid_out <= 1; 
+                end else begin
+                    valid_out <= 1; // Pulse ONCE per symbol
                 end
-                if (flush_cnt < 11)
-                    flush_cnt <= flush_cnt + 1;
-                else
-                    flushing_active <= 0;
+            end 
+            else begin
+                if (fill_cnt >= 3 && !flushing_active && flush_cnt == 0) begin
+                    if (silence_timer < TIMEOUT_CYCLES) silence_timer <= silence_timer + 1;
+                    else flushing_active <= 1;
+                end
+
+                if (flushing_active) begin
+                    // Two flush pulses spaced 10 clocks apart to match the
+                    // 9-tick synchronous-ROM pipeline minimum period.
+                    if (flush_cnt == 0 || flush_cnt == 10) begin
+                        for (int i=0; i<4; i++) begin win_I[i] <= win_I[i+1]; win_Q[i] <= win_Q[i+1]; end
+                        win_I[4] <= INIT_VAL; win_Q[4] <= INIT_VAL;
+                        valid_out <= 1; 
+                    end
+                    
+                    if (flush_cnt < 11) begin
+                        flush_cnt <= flush_cnt + 1;
+                    end else begin
+                        flushing_active <= 0;
+                        flush_cnt <= 0;
+                        fill_cnt <= 0; // Reset so the next packet waits for 3 symbols again
+                    end
+                end
             end
         end
     end

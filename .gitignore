@@ -1,0 +1,55 @@
+# ============================================================
+# .gitignore for ASIC project
+# ============================================================
+
+# --- Standard Cell Libraries (large PDK files — not committed)
+standard_cell_libraries/
+
+# --- Synthesis work directories
+syn/script/work/
+syn/output/*.v
+syn/output/*.ddc
+syn/output/*.svf
+syn/output/*.sdc
+syn/output/*.sdf
+
+# --- PnR design libraries and NDM outputs (binary, large)
+pnr/1_ndm/output/
+pnr/2_design_library/output/
+pnr/3_floorplan/output/
+pnr/4_powerplan/output/
+pnr/5_placment/output/
+pnr/6_cts/output/
+pnr/7_routing/output/
+pnr/8_timing_analysis/output/
+pnr/9_finish/output/
+
+# --- Tool-generated lock files
+**/*.ndm.lock
+**/*.dlib.lock
+
+# --- Large log files
+*.log
+*.txt
+!README.txt
+
+# --- Report files (optional: comment out if you want to track reports)
+# pnr/*/report/
+
+# --- Tool temp / run directory artifacts
+pnr/*/run/*.tcl.bak
+pnr/*/run/*.cmd
+pnr/*/run/*.err
+
+# --- DFT outputs
+dft/output/
+
+# --- Formality outputs
+formality/output/
+formality/fv/
+
+# --- Misc tool artifacts
+*.DS_Store
+*.swp
+*.swo
+*~

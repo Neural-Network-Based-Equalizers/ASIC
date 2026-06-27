@@ -1,0 +1,4 @@
+rm -rf ../log/* ../report/*
+mkdir -p ../log ../report
+icc2_shell -f ../script/timing_analysis.tcl | tee ../log/timing.log
+rm -rf command.log filenames.log
