@@ -1,0 +1,16 @@
+# ICC2 Generated Output Directories
+*/output/
+*.dlib/
+*.errdm/
+
+# Layout & Netlist Artifacts
+*.ndm
+*.def
+*.spef
+*.gds
+*.err
+*.v
+
+# Reports and Logs
+*.log
+*.rpt

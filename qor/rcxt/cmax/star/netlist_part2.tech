@@ -1,0 +1,35 @@
+-ordered_names_for_subckt subckt
+-file_size_limit 6917529027641081856
+-hn_file hnfile.hn
+-net_info_file netlist.netinfo
+-pin_file idx.pins
+-idx_nm_file idx.nm
+-instance_section_index_file idx
+-index_file idx
+-i xout_part2_split
+-netlist_header_file netlist.hdr
+-output_form 3
+-keep_intranet_caps
+-xout2spef
+-xout2spf
+-instance_section 2
+-declare_pins
+-declare_instance_ports
+-c_unit 1e-15
+-r_unit 1
+-t_unit 1e-09
+-v_unit 1e-09
+-l_unit 1
+-abs_cap_threshold 3e-15
+-rel_cap_threshold 0.03
+-net_command_file select_nets
+-o ../mips_16_cmax_tm40.spef_part2
+-rename_pin_ports _
+-rename_instance_ports _
+-process_corner 2
+-layer_info layer_info
+-suppress_print_extra_geometry_info
+-port_map
+-skip_isolated_subnode
+-case_sensitive
+-fine_dbu

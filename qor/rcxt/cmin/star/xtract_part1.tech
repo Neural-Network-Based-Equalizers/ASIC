@@ -1,0 +1,19 @@
+-o xout_part1
+-full_chip_xin xin
+-i xin_part1
+-tcad_file /home/standard_cell_libraries/NangateOpenCellLibrary_PDKv1_3_v2010_12/tech/rcxt/FreePDK45_10m_Cmin.nxtgrd
+-layer_info layer_info
+-operating_temperature 125
+-xm 400
+-extraction RC
+-rfr 0.99
+-suppress_file xtract.sup
+-floating_metal_fill
+-vert_parts
+-cut_thickness 1
+-covertical 4
+-strict_cell_overlap_handling
+-fine_dbu
+-num_parts 8
+-dp_partition_id 1
+-density_input xin_density

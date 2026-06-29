@@ -1,0 +1,27 @@
+
+
+                         StarRC (TM)
+             Copyright (c) 1999-2012 Synopsys, Inc.
+                      All Rights Reserved
+
+
+ExecName: /usr/synopsys/StarRC/bin/StarXtract
+Version: G-2012.06-SP2
+Built on: Aug 27 2012 21:31:32
+Start Time: Wed May  2 09:46:05 2018
+
+Host ............ localhost.localdomain
+
+output xin_part1.tmap a map of size 23953
+output xin_part2.tmap a map of size 24318
+output xin_part3.tmap a map of size 21065
+output xin_part4.tmap a map of size 22743
+output xin_part5.tmap a map of size 23745
+output xin_part6.tmap a map of size 21535
+output xin_part7.tmap a map of size 22230
+output xin_part8.tmap a map of size 22118
+output xin_density.tmap a map of size 169175
+  
+PartitionPP   Elp=00:00:03 Cpu=00:00:02 Usr=2.4    Sys=0.1    Mem=75.5  
+  
+Done          Elp=00:00:03 Cpu=00:00:02 Usr=2.4    Sys=0.1    Mem=75.5  

@@ -9,24 +9,24 @@ set_false_path -hold -to [all_outputs]
 
 set_case_analysis 0 test_mode
 set_dont_touch_network [get_clocks {fun_clk}]
-set_dont_touch_network [get_ports  {fun_rst_n}]
+#set_dont_touch_network [get_ports  {fun_rst_n}]
 
-set_max_transition 0.5 [current_design]
-set_max_capacitance 2.0 [current_design]
+#set_max_transition 0.5 [current_design]
+#set_max_capacitance 2.0 [current_design]
 # set_max_area 0.0 
 
 # # ---  grouping paths 
 group_path -name "comp_paths" -to {fun_clk}
 set_app_var compile_ultra_ungroup_dw false
 
-set_max_fanout 3 $design 
+##set_max_fanout 16 $design 
 set_max_delay 3 -group_path "comp_paths" -to [all_outputs]
 
 # ##################################################
 # 		# ----- Interaface  ---------  # 
 # ##################################################
-set_driving_cell -lib_cell BUF_X2 -pin Z [remove_from_collection [all_inputs] [get_ports {fun_clk}]];
-set_load 1 [all_outputs]
+##set_driving_cell -lib_cell BUF_X2 -pin Z [remove_from_collection [all_inputs] [get_ports {fun_clk}]];
+##set_load 1 [all_outputs]
 
 
 

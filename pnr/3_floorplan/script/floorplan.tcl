@@ -21,7 +21,7 @@
 # ICC1 equiv file : pnr45.tcl  Section "2. Floorplan"
 # Author  : Auto-generated for neural_eq_top PnR flow
 ########################################################################
-
+set_host_options -max_cores 4
 puts "INFO: ================================================"
 puts "INFO:  ICC2 Floorplan — neural_eq_top (45nm)"
 puts "INFO: ================================================"
@@ -119,12 +119,12 @@ set_attribute [get_site_defs $Name_unit] symmetry {Y}
 #     -left_io2core 12.4 -bottom_io2core 12.4 \
 #     -right_io2core 12.4 -top_io2core 12.4
 # ======================================================================
-puts "INFO: Initializing floorplan (25% utilization, 12.4µm margins)..."
+puts "INFO: Initializing floorplan (40% utilization, 15µm margins)..."
 initialize_floorplan \
-    -core_utilization 0.25 \
-    -core_offset      {12.4 12.4 12.4 12.4} \
+    -core_utilization 0.20 \
+    -core_offset      {15 15 15 15} \
     -shape            R \
-    -flip_first_row   false
+    -flip_first_row   true
 
 # ======================================================================
 # 8. Place I/O Pins
@@ -140,6 +140,7 @@ initialize_floorplan \
 #   place_pins -ports [get_ports *]
 # ======================================================================
 puts "INFO: Placing I/O pins..."
+set_block_pin_constraints -self -allowed_layers {metal3 metal4} -sides {1 2 3 4}
 place_pins -ports [get_ports *]
 
 # ======================================================================
@@ -173,9 +174,9 @@ place_pins -ports [get_ports *]
 # ======================================================================
 puts "INFO: Inserting tap cells..."
 create_tap_cells \
-    -lib_cell NangateOpenCellLibrary/TAP \
-    -distance 25 \
-    -pattern  every_other_row
+    -lib_cell NangateOpenCellLibrary_physical_only/TAP \
+    -distance 30 \
+    -pattern  stagger
 
 # ======================================================================
 # 11. Initial Virtual Flat Placement
@@ -237,3 +238,7 @@ puts "INFO:  Floorplan Complete!"
 puts "INFO:  Block saved: ${design}_fp"
 puts "INFO:  Next step: Step 4 — Power Plan"
 puts "INFO: ================================================"
+
+
+exit
+

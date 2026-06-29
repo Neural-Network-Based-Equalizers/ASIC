@@ -1,0 +1,115 @@
+Parsing option_file: split_netlist.tech
+Running Amd_64b    
+Remove file xin_part1
+Remove file xin_sub1_part1
+Remove file xin_sub1_part2
+Remove file xin_sub1_part3
+Remove file xin_sub1_part4
+Remove file xin_sub1_part5
+Remove file xin_sub1_part6
+Remove file xin_sub1_part7
+Remove file xin_sub1_part8
+Remove file xin_part2
+Remove file xin_sub2_part1
+Remove file xin_sub2_part2
+Remove file xin_sub2_part3
+Remove file xin_sub2_part4
+Remove file xin_sub2_part5
+Remove file xin_sub2_part6
+Remove file xin_sub2_part7
+Remove file xin_sub2_part8
+Remove file xin_part3
+Remove file xin_sub3_part1
+Remove file xin_sub3_part2
+Remove file xin_sub3_part3
+Remove file xin_sub3_part4
+Remove file xin_sub3_part5
+Remove file xin_sub3_part6
+Remove file xin_sub3_part7
+Remove file xin_sub3_part8
+Remove file xin_part4
+Remove file xin_sub4_part1
+Remove file xin_sub4_part2
+Remove file xin_sub4_part3
+Remove file xin_sub4_part4
+Remove file xin_sub4_part5
+Remove file xin_sub4_part6
+Remove file xin_sub4_part7
+Remove file xin_sub4_part8
+Remove file xin_part5
+Remove file xin_sub5_part1
+Remove file xin_sub5_part2
+Remove file xin_sub5_part3
+Remove file xin_sub5_part4
+Remove file xin_sub5_part5
+Remove file xin_sub5_part6
+Remove file xin_sub5_part7
+Remove file xin_sub5_part8
+Remove file xin_part6
+Remove file xin_sub6_part1
+Remove file xin_sub6_part2
+Remove file xin_sub6_part3
+Remove file xin_sub6_part4
+Remove file xin_sub6_part5
+Remove file xin_sub6_part6
+Remove file xin_sub6_part7
+Remove file xin_sub6_part8
+Remove file xin_part7
+Remove file xin_sub7_part1
+Remove file xin_sub7_part2
+Remove file xin_sub7_part3
+Remove file xin_sub7_part4
+Remove file xin_sub7_part5
+Remove file xin_sub7_part6
+Remove file xin_sub7_part7
+Remove file xin_sub7_part8
+Remove file xin_part8
+Remove file xin_sub8_part1
+Remove file xin_sub8_part2
+Remove file xin_sub8_part3
+Remove file xin_sub8_part4
+Remove file xin_sub8_part5
+Remove file xin_sub8_part6
+Remove file xin_sub8_part7
+Remove file xin_sub8_part8
+parsing multipart file: xout_part1_multipart_count
+parsing multipart file: xout_part2_multipart_count
+parsing multipart file: xout_part3_multipart_count
+parsing multipart file: xout_part4_multipart_count
+parsing multipart file: xout_part5_multipart_count
+parsing multipart file: xout_part6_multipart_count
+parsing multipart file: xout_part7_multipart_count
+parsing multipart file: xout_part8_multipart_count
+XoutCapDataWriter xout_split_capdata
+XoutMergeCondition_Dp loading offset file
+XoutMergeTranslator loading text_count_file
+ XoutMultipleReader::initReaders xout_part1 partId 0 offset 229577
+ XoutMultipleReader::initReaders xout_part2 partId 1 offset 298077
+ XoutMultipleReader::initReaders xout_part3 partId 2 offset 373981
+ XoutMultipleReader::initReaders xout_part4 partId 3 offset 447309
+ XoutMultipleReader::initReaders xout_part5 partId 4 offset 523463
+ XoutMultipleReader::initReaders xout_part6 partId 5 offset 595506
+ XoutMultipleReader::initReaders xout_part7 partId 6 offset 665236
+ XoutMultipleReader::initReaders xout_part8 partId 7 offset 737631
+Completed   0%  Time=00:00:00  RemainingTime=00:00:05  Mem=60.2227
+Completed  10%  Time=00:00:00  RemainingTime=00:00:01  Mem=62.9844
+Completed  20%  Time=00:00:00  RemainingTime=00:00:01  Mem=64.8594
+Completed  40%  Time=00:00:00  RemainingTime=00:00:01  Mem=68.6992
+Completed  60%  Time=00:00:00  RemainingTime=00:00:01  Mem=70.8867
+Completed  80%  Time=00:00:01  RemainingTime=00:00:00  Mem=74.4297
+Completed 100%  Time=00:00:01  RemainingTime=00:00:00  Mem=75.0586
+XoutMergeTranslator::end_circuit
+processXoutPartitionHeaderFile xout_split_1 xout_split_1_
+processXoutPartitionHeaderFile xout_split_2 xout_split_2_
+processXoutPartitionHeaderFile xout_split_3 xout_split_3_
+processXoutPartitionHeaderFile xout_split_4 xout_split_4_
+processXoutPartitionHeaderFile xout_split_5 xout_split_5_
+processXoutPartitionHeaderFile xout_split_6 xout_split_6_
+processXoutPartitionHeaderFile xout_split_7 xout_split_7_
+processXoutPartitionHeaderFile xout_split_8 xout_split_8_
+processXoutPartitionHeaderFile xout_split xout_split_
+  
+xTractor      Elp=00:00:02 Cpu=00:00:01 Usr=1.5    Sys=0.1    Mem=75.2  
+  
+Done          Elp=00:00:02 Cpu=00:00:01 Usr=1.5    Sys=0.1    Mem=75.2  
+

@@ -20,6 +20,7 @@
 # ICC1 equiv file : pnr45.tcl  Section "7. Finishing" + "8. Outputs"
 # Author  : Auto-generated for neural_eq_top PnR flow
 ########################################################################
+set_host_options -max_cores 4
 
 puts "INFO: ================================================"
 puts "INFO:  ICC2 Finishing + Output — neural_eq_top (45nm)"
@@ -47,6 +48,24 @@ open_block ${design}_route
 
 copy_block -from_block ${design}_route -to_block ${design}_final
 current_block ${design}_final
+start_gui
+
+# ======================================================================
+# 2b. Post-Route Optimizations & Yield Enhancement
+# ======================================================================
+# This section runs the optimizations that were skipped during the
+# main routing step to save time. 
+
+puts "INFO: Running Post-route timing optimization and DRC cleanup..."
+route_opt
+
+puts "INFO: Inserting redundant vias for yield enhancement..."
+add_redundant_vias
+
+puts "INFO: Running final Incremental ECO routing (DRC cleanup)..."
+# This single incremental pass will clean up any DRCs left over from
+# the main route, the hold buffers, AND the redundant vias all at once!
+route_detail -incremental true
 
 # ======================================================================
 # 3. Final DRC + LVS Pre-Check (Before Filling)
@@ -88,12 +107,12 @@ check_lvs -max_error 0 > ../report/finish_pre_fill_lvs.rpt
 puts "INFO: Inserting filler cells..."
 create_stdcell_fillers \
     -lib_cells {
-        NangateOpenCellLibrary/FILLCELL_X32
-        NangateOpenCellLibrary/FILLCELL_X16
-        NangateOpenCellLibrary/FILLCELL_X8
-        NangateOpenCellLibrary/FILLCELL_X4
-        NangateOpenCellLibrary/FILLCELL_X2
-        NangateOpenCellLibrary/FILLCELL_X1
+        */FILLCELL_X32
+        */FILLCELL_X16
+        */FILLCELL_X8
+        */FILLCELL_X4
+        */FILLCELL_X2
+        */FILLCELL_X1
     }
 
 # Remove any filler cells that were placed where they cause DRC violations
@@ -168,10 +187,9 @@ check_pg_drc           > ../report/finish_pg_drc.rpt
 puts "INFO: Writing GDS layout..."
 file mkdir ../output
 write_gds \
-    -output      ../output/${design}.gds \
-    -lib_cell    $design \
     -layer_map   $GDS_MAP \
-    -long_names
+    -long_names \
+    ../output/${design}.gds
 
 # ======================================================================
 # 9. Write Post-Layout Verilog Netlist
@@ -261,3 +279,4 @@ puts "INFO:  Final SDC : ../output/${design}_final.sdc"
 puts "INFO: ================================================"
 puts "INFO:  Flow Complete — all PnR steps done!"
 puts "INFO: ================================================"
+

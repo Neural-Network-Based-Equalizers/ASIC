@@ -1,0 +1,90 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : neural_eq_top
+Version: O-2018.06-SP1
+Date   : Sat Jun 27 09:07:42 2026
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: worst_low   Library: NangateOpenCellLibrary_ss0p95vn40c
+Wire Load Model Mode: top
+
+  Startpoint: u_layer1/l1_tick_reg[2]
+              (rising edge-triggered flip-flop clocked by fun_clk)
+  Endpoint: u_layer1/L1_MAC[18].p1_reg_reg[27]
+            (rising edge-triggered flip-flop clocked by fun_clk)
+  Path Group: comp_paths
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  neural_eq_top      5K_hvratio_1_1        NangateOpenCellLibrary_ss0p95vn40c
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock fun_clk (rise edge)                               0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_layer1/l1_tick_reg[2]/CK (DFFR_X2)                    0.00 #     0.00 r
+  u_layer1/l1_tick_reg[2]/QN (DFFR_X2)                    0.10       0.10 f
+  u_layer1/U375/ZN (NOR3_X2)                              0.21       0.31 r
+  u_layer1/U23/Z (BUF_X8)                                 0.15       0.46 r
+  u_layer1/U535/ZN (AOI22_X4)                             0.13       0.59 f
+  u_layer1/U536/ZN (NAND2_X4)                             0.22       0.81 r
+  u_layer1/U11/Z (BUF_X16)                                0.33       1.14 r
+  u_layer1/mult_x_192/a[8] (layer1_compute_DW_mult_tc_J2_41)
+                                                          0.00       1.14 r
+  u_layer1/mult_x_192/U522/ZN (INV_X16)                   0.42       1.56 f
+  u_layer1/mult_x_192/U523/ZN (OAI22_X4)                  0.14       1.70 r
+  u_layer1/mult_x_192/U526/ZN (INV_X16)                   0.24       1.94 f
+  u_layer1/mult_x_192/U527/ZN (AOI221_X4)                 0.13       2.07 r
+  u_layer1/mult_x_192/U528/ZN (INV_X16)                   0.18       2.25 f
+  u_layer1/mult_x_192/U529/ZN (NOR2_X4)                   0.10       2.34 r
+  u_layer1/mult_x_192/U546/ZN (INV_X16)                   0.18       2.52 f
+  u_layer1/mult_x_192/U715/ZN (OAI21_X4)                  0.05       2.58 r
+  u_layer1/mult_x_192/U727/S (FA_X1)                      0.10       2.68 f
+  u_layer1/mult_x_192/U740/S (FA_X1)                      0.12       2.80 r
+  u_layer1/mult_x_192/U741/S (FA_X1)                      0.11       2.90 f
+  u_layer1/mult_x_192/U807/CO (FA_X1)                     0.09       2.99 f
+  u_layer1/mult_x_192/U808/CO (FA_X1)                     0.08       3.07 f
+  u_layer1/mult_x_192/U809/CO (FA_X1)                     0.08       3.15 f
+  u_layer1/mult_x_192/U810/CO (FA_X1)                     0.08       3.24 f
+  u_layer1/mult_x_192/U811/CO (FA_X1)                     0.08       3.32 f
+  u_layer1/mult_x_192/U812/CO (FA_X1)                     0.08       3.40 f
+  u_layer1/mult_x_192/U813/CO (FA_X1)                     0.08       3.48 f
+  u_layer1/mult_x_192/U814/CO (FA_X1)                     0.08       3.56 f
+  u_layer1/mult_x_192/U815/CO (FA_X1)                     0.08       3.64 f
+  u_layer1/mult_x_192/U816/CO (FA_X1)                     0.08       3.72 f
+  u_layer1/mult_x_192/U817/CO (FA_X1)                     0.08       3.80 f
+  u_layer1/mult_x_192/U818/CO (FA_X1)                     0.08       3.88 f
+  u_layer1/mult_x_192/U819/CO (FA_X1)                     0.08       3.96 f
+  u_layer1/mult_x_192/U820/CO (FA_X1)                     0.08       4.04 f
+  u_layer1/mult_x_192/U821/CO (FA_X1)                     0.08       4.12 f
+  u_layer1/mult_x_192/U822/CO (FA_X1)                     0.08       4.21 f
+  u_layer1/mult_x_192/U823/CO (FA_X1)                     0.11       4.32 f
+  u_layer1/mult_x_192/U796/ZN (INV_X16)                   0.16       4.48 r
+  u_layer1/mult_x_192/product[27] (layer1_compute_DW_mult_tc_J2_41)
+                                                          0.00       4.48 r
+  u_layer1/U5760/ZN (NAND2_X4)                            0.07       4.54 f
+  u_layer1/U5765/ZN (OAI21_X4)                            0.06       4.60 r
+  u_layer1/L1_MAC[18].p1_reg_reg[27]/D (DFFR_X2)          0.01       4.61 r
+  data arrival time                                                  4.61
+
+  clock fun_clk (rise edge)                               5.00       5.00
+  clock network delay (ideal)                             0.00       5.00
+  clock uncertainty                                      -0.35       4.65
+  u_layer1/L1_MAC[18].p1_reg_reg[27]/CK (DFFR_X2)         0.00       4.65 r
+  library setup time                                     -0.03       4.62
+  data required time                                                 4.62
+  --------------------------------------------------------------------------
+  data required time                                                 4.62
+  data arrival time                                                 -4.61
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+1

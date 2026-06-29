@@ -1,0 +1,27 @@
+via1
+UP: metal2
+DOWN: metal1
+via2
+UP: metal3
+DOWN: metal2
+via3
+UP: metal4
+DOWN: metal3
+via4
+UP: metal5
+DOWN: metal4
+via5
+UP: metal6
+DOWN: metal5
+via6
+UP: metal7
+DOWN: metal6
+via7
+UP: metal8
+DOWN: metal7
+via8
+UP: metal9
+DOWN: metal8
+via9
+UP: metal10
+DOWN: metal9

@@ -1,0 +1,43 @@
+Parsing option_file: xtract_part1.tech
+Running Amd_64b    
+constructing feqyacc
+Reading binary grd file
+ /home/standard_cell_libraries/NangateOpenCellLibrary_PDKv1_3_v2010_12/tech/rcxt/FreePDK45_10m_Cmax.nxtgrd...
+
+Extracting... 
+Completed   0%  Time=00:00:00  RemainingTime=00:00:01  Mem=118.738
+Completed   1%  Time=00:00:00  RemainingTime=00:00:00  Mem=120.441
+Completed   2%  Time=00:00:00  RemainingTime=00:00:00  Mem=122
+Completed   3%  Time=00:00:00  RemainingTime=00:00:00  Mem=123.809
+Completed   4%  Time=00:00:00  RemainingTime=00:00:00  Mem=125.488
+Completed   5%  Time=00:00:00  RemainingTime=00:00:00  Mem=127.824
+Completed  10%  Time=00:00:00  RemainingTime=00:00:00  Mem=138.102
+Completed  15%  Time=00:00:00  RemainingTime=00:00:01  Mem=147.477
+Completed  20%  Time=00:00:00  RemainingTime=00:00:01  Mem=159.531
+Completed  25%  Time=00:00:00  RemainingTime=00:00:02  Mem=164.34
+Completed  30%  Time=00:00:00  RemainingTime=00:00:02  Mem=168.426
+Completed  35%  Time=00:00:01  RemainingTime=00:00:03  Mem=176.453
+Completed  40%  Time=00:00:01  RemainingTime=00:00:03  Mem=177.918
+Completed  45%  Time=00:00:02  RemainingTime=00:00:03  Mem=181.07
+Completed  50%  Time=00:00:02  RemainingTime=00:00:02  Mem=181.199
+Completed  55%  Time=00:00:03  RemainingTime=00:00:02  Mem=183.332
+Completed  60%  Time=00:00:03  RemainingTime=00:00:02  Mem=184.258
+Completed  65%  Time=00:00:03  RemainingTime=00:00:03  Mem=188.328
+Completed  70%  Time=00:00:04  RemainingTime=00:00:01  Mem=188.988
+Completed  75%  Time=00:00:04  RemainingTime=00:00:02  Mem=192.898
+Completed  80%  Time=00:00:04  RemainingTime=00:00:02  Mem=192.898
+Completed  85%  Time=00:00:05  RemainingTime=00:00:01  Mem=194.418
+Completed  90%  Time=00:00:05  RemainingTime=00:00:01  Mem=195.789
+Completed  95%  Time=00:00:06  RemainingTime=00:00:00  Mem=199.496
+Completed 100%  Time=00:00:06  RemainingTime=00:00:00  Mem=199.492
+processXoutPartitionHeaderFile xout_part1 xout_part1_
+Extracted 5831119 capacitors, 395934 resistors, 0 reluctors, 360452 nodes
+Reduced to 48742 nodes,  (86.4775%)
+Reduced to 29968 resistors,  (92.4311%)
+Reduced to 214960 capacitors,  (96.3136%)
+* Maximum opened files = 4
+  
+xTractor      Elp=00:00:08 Cpu=00:00:08 Usr=8.4    Sys=0.1    Mem=202.2 
+  
+Done          Elp=00:00:08 Cpu=00:00:08 Usr=8.4    Sys=0.1    Mem=202.2 
+

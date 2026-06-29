@@ -1,0 +1,11 @@
+-merge_xout
+-num_parts 8
+-r 0
+-dp_partition_id 32
+-num_splits 250000
+-just_split
+-xout2spf
+-output_form 3
+-i xout_part5
+-index_file idx
+-net_command_file select_nets

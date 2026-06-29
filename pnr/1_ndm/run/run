@@ -2,3 +2,4 @@ rm -rf ../log/* ../report/* ../output/*
 mkdir -p ../log ../report ../output
 icc2_lm_shell -f ../script/create_ndm.tcl | tee ../log/ndm.log
 rm -rf command.log filenames.log
+

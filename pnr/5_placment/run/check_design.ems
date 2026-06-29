@@ -1,0 +1,15 @@
+<Database>
+Name/home/ICer/Desktop/ASIC/pnr/5_placment/run/check_design.ems
+Creation TimeSat Jun 27 17:58:01 2026
+Modified TimeSat Jun 27 17:58:02 2026
+Design Nameneural_eq_top_pl
+Library Nameneural_eq_top.dlib
+</Database>
+<RuleCount>
+DFT-0111
+</RuleCount>
+<UserDefinedRules>
+</UserDefinedRules>
+<Messages>
+DFT-011reason10
+</Messages>

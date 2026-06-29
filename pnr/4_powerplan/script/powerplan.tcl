@@ -20,7 +20,7 @@
 # ICC1 equiv file : pnr45.tcl  Section "3. POWER NETWORK"
 # Author  : Auto-generated for neural_eq_top PnR flow
 ########################################################################
-
+set_host_options -max_cores 4
 puts "INFO: ================================================"
 puts "INFO:  ICC2 Power Plan — neural_eq_top (45nm)"
 puts "INFO: ================================================"
@@ -161,8 +161,10 @@ check_pg_connectivity > ../report/pg_ring_connectivity.rpt
 puts "INFO: Creating power mesh upper tier (metal7 H + metal8 V)..."
 
 create_pg_mesh_pattern mesh_upper \
-    -layers {{{horizontal_layer: metal7} {width: 2.5} {pitch: 30} {spacing: interleaving} {offset: 2} {trim: true}}
-             {{vertical_layer:   metal8} {width: 2.5} {pitch: 30} {spacing: interleaving} {offset: 2} {trim: true}}}
+    -layers {
+        { {horizontal_layer: metal7} {width: 2.5} {pitch: 30} {spacing: interleaving} {offset: 2} {trim: true} }
+        { {vertical_layer:   metal8} {width: 2.5} {pitch: 30} {spacing: interleaving} {offset: 2} {trim: true} }
+    }
 
 set_pg_strategy mesh_upper_strategy \
     -core \
@@ -190,8 +192,10 @@ check_pg_connectivity > ../report/pg_mesh_upper_conn.rpt
 puts "INFO: Creating power mesh lower tier (metal5 H + metal6 V)..."
 
 create_pg_mesh_pattern mesh_lower \
-    -layers {{{horizontal_layer: metal5} {width: 1.5} {pitch: 30} {spacing: interleaving} {offset: 2} {trim: true}}
-             {{vertical_layer:   metal6} {width: 1.5} {pitch: 30} {spacing: interleaving} {offset: 2} {trim: true}}}
+    -layers {
+        { {horizontal_layer: metal5} {width: 1.5} {pitch: 30} {spacing: interleaving} {offset: 2} {trim: true} }
+        { {vertical_layer:   metal6} {width: 1.5} {pitch: 30} {spacing: interleaving} {offset: 2} {trim: true} }
+    }
 
 set_pg_strategy mesh_lower_strategy \
     -core \
@@ -283,3 +287,7 @@ puts "INFO:  Power Plan Complete!"
 puts "INFO:  Block saved: ${design}_pp"
 puts "INFO:  Next step: Step 5 — Placement"
 puts "INFO: ================================================"
+
+exit
+
+

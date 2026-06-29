@@ -1,0 +1,17 @@
+<Database>
+Name/home/ICer/Desktop/ASIC/pnr/6_cts/run/check_design.ems
+Creation TimeSat Jun 27 18:13:44 2026
+Modified TimeSat Jun 27 18:14:09 2026
+Design Nameneural_eq_top_cts
+Library Nameneural_eq_top.dlib
+</Database>
+<RuleCount>
+CTS-9021
+DFT-0111
+</RuleCount>
+<UserDefinedRules>
+</UserDefinedRules>
+<Messages>
+DFT-011reason10
+CTS-902
+</Messages>

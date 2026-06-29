@@ -20,7 +20,7 @@
 # ICC1 equiv file : pnr45.tcl  Section "4. Placement"
 # Author  : Auto-generated for neural_eq_top PnR flow
 ########################################################################
-
+set_host_options -max_cores 4
 puts "INFO: ================================================"
 puts "INFO:  ICC2 Placement — neural_eq_top (45nm)"
 puts "INFO: ================================================"
@@ -31,6 +31,9 @@ puts "INFO: ================================================"
 set design          "neural_eq_top"
 set design_lib_path "../../2_design_library/output"
 set DLIB            "${design_lib_path}/${design}.dlib"
+
+# --- Start GUI for interactive debugging as requested
+start_gui
 
 # ======================================================================
 # 2. Remove lock file & Open Block
@@ -75,6 +78,9 @@ set_app_options -name opt.common.user_instance_name_prefix -value "PLACE_"
 set_app_options -name opt.common.max_fanout   -value 16
 set_app_options -name opt.tie_cell.max_fanout -value 4
 
+# Ignore missing scan chains since we don't have a scan DEF file
+set_app_options -name place.coarse.continue_on_missing_scandef -value true
+
 report_app_options > ../report/placement_options.rpt
 
 # ======================================================================
@@ -99,7 +105,7 @@ report_app_options > ../report/placement_options.rpt
 puts "INFO: Adding spare cells..."
 add_spare_cells \
     -cell_name   "SpareCell" \
-    -lib_cell    "NangateOpenCellLibrary/NAND2_X4 NangateOpenCellLibrary/NOR2_X4" \
+    -lib_cell    "NangateOpenCellLibrary_ss0p95vn40c/NAND2_X4 NangateOpenCellLibrary_ss0p95vn40c/NOR2_X4" \
     -num_instances 20
 
 # Spread spare cells randomly for good coverage
@@ -131,27 +137,27 @@ set_fixed_objects $spare_cells
 #   set tie_pins [get_pins -all -filter "constant_value == 0 ..."]
 #   derive_pg_connection -tie
 #   connect_tie_cells -objects $tie_pins \
-#     -tie_low_lib_cell  */LOGIC0_X1 \
-#     -tie_high_lib_cell */LOGIC1_X1
+#     -tie_low_lib_cell  NangateOpenCellLibrary/LOGIC0_X1 \
+#     -tie_high_lib_cell NangateOpenCellLibrary/LOGIC1_X1
 #
 # ICC2 equiv from pnr90.tcl: add_tie_cells command
 # ======================================================================
 puts "INFO: Adding tie cells..."
 
 # Enable tie cells for use (they are often excluded by default)
-set_attribute [get_lib_cells NangateOpenCellLibrary/LOGIC1_X1] dont_use false
-set_attribute [get_lib_cells NangateOpenCellLibrary/LOGIC1_X1] dont_touch false
-set_lib_cell_purpose -include all {NangateOpenCellLibrary/LOGIC1_X1}
+set_attribute [get_lib_cells NangateOpenCellLibrary_ss0p95vn40c/LOGIC1_X1] dont_use false
+set_attribute [get_lib_cells NangateOpenCellLibrary_ss0p95vn40c/LOGIC1_X1] dont_touch false
+set_lib_cell_purpose -include all {NangateOpenCellLibrary_ss0p95vn40c/LOGIC1_X1}
 
-set_attribute [get_lib_cells NangateOpenCellLibrary/LOGIC0_X1] dont_use false
-set_attribute [get_lib_cells NangateOpenCellLibrary/LOGIC0_X1] dont_touch false
-set_lib_cell_purpose -include all {NangateOpenCellLibrary/LOGIC0_X1}
+set_attribute [get_lib_cells NangateOpenCellLibrary_ss0p95vn40c/LOGIC0_X1] dont_use false
+set_attribute [get_lib_cells NangateOpenCellLibrary_ss0p95vn40c/LOGIC0_X1] dont_touch false
+set_lib_cell_purpose -include all {NangateOpenCellLibrary_ss0p95vn40c/LOGIC0_X1}
 
 # Insert tie cells on the spare cells (or all constant-tied pins)
 add_tie_cells \
     -objects          $spare_cells \
-    -tie_low_lib_cells  NangateOpenCellLibrary/LOGIC0_X1 \
-    -tie_high_lib_cells NangateOpenCellLibrary/LOGIC1_X1 \
+    -tie_low_lib_cells  NangateOpenCellLibrary_ss0p95vn40c/LOGIC0_X1 \
+    -tie_high_lib_cells NangateOpenCellLibrary_ss0p95vn40c/LOGIC1_X1 \
     -legalize
 
 # ======================================================================
@@ -195,11 +201,10 @@ create_placement \
     -timing_driven \
     -buffering_aware_timing_driven \
     -congestion \
-    -congestion_effort             medium \
-    -incremental
+    -congestion_effort             medium
 
 # Legalize: moves each cell to the nearest legal location (row-aligned, no overlap)
-legalize_placement -incremental
+legalize_placement
 check_pg_drc > ../report/drc_after_legalize.rpt
 
 # ======================================================================
@@ -268,3 +273,7 @@ puts "INFO:  Placement Complete!"
 puts "INFO:  Block saved: ${design}_pl"
 puts "INFO:  Next step: Step 6 — CTS"
 puts "INFO: ================================================"
+
+exit
+
+

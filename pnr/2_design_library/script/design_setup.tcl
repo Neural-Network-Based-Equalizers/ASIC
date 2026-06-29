@@ -28,23 +28,15 @@ puts "INFO: ============================================"
 set design         "neural_eq_top"
 set PDK_ROOT       "/home/standard_cell_libraries/NangateOpenCellLibrary_PDKv1_3_v2010_12"
 
-# --- Technology File
-set TECH_FILE      "${PDK_ROOT}/tech/techfile/milkyway/FreePDK45_10m.tf"
+# --- Technology File (Using the patched version from Step 1)
+set TECH_FILE      "../../1_ndm/output/FreePDK45_10m_fixed.tf"
 
-# --- Reference NDM library (output from Step 1)
-#     icc2_lm typically appends _1 to the name — adjust if your output differs.
-#     Check 1_ndm/output/ for the actual .ndm filename.
-set NDM_DIR        "../../1_ndm/output"
-
-# --- Auto-detect the .ndm file in the output directory
-set ndm_files [glob -nocomplain ${NDM_DIR}/*.ndm]
-if {[llength $ndm_files] == 0} {
-    puts "ERROR: No .ndm file found in ${NDM_DIR}/"
-    puts "ERROR: Please run Step 1 (create_ndm.tcl) first."
-    exit 1
-}
-set NDM_REF_LIB [lindex $ndm_files 0]
-puts "INFO: Using NDM reference library: $NDM_REF_LIB"
+# --- Reference NDM libraries (output from Step 1)
+# Note: exploration flow creates TWO NDM files (one for timing, one for physical-only cells like TAP/FILL)
+set NDM_REF_LIB_TIMING   "../../1_ndm/output/NangateOpenCellLibrary_ss0p95vn40c.ndm"
+set NDM_REF_LIB_PHYSICAL "../../1_ndm/output/NangateOpenCellLibrary_physical_only.ndm"
+puts "INFO: Using NDM TIMING: $NDM_REF_LIB_TIMING"
+puts "INFO: Using NDM PHYSICAL: $NDM_REF_LIB_PHYSICAL"
 
 # --- Synthesis outputs (relative to pnr/2_design_library/run/)
 set SYN_DIR        "../../../syn/output"
@@ -59,18 +51,18 @@ set TLUP_MAP       "${PDK_ROOT}/tech/rcxt/FreePDK45_10m.map"
 # --- Design library output
 set DLIB_DIR       "../output"
 set DLIB_NAME      "${design}.dlib"
+set DLIB           "${DLIB_DIR}/${DLIB_NAME}"
 
 puts "INFO: Design        = $design"
 puts "INFO: TECH_FILE     = $TECH_FILE"
-puts "INFO: NDM_REF_LIB   = $NDM_REF_LIB"
 puts "INFO: NETLIST        = $NETLIST"
 puts "INFO: SDC_FILE       = $SDC_FILE"
-puts "INFO: DLIB output    = ${DLIB_DIR}/${DLIB_NAME}"
+puts "INFO: DLIB output    = $DLIB"
 
 # ======================================================================
-# 2. Pre-flight Checks
+# 2. Check File Existence
 # ======================================================================
-foreach f [list $TECH_FILE $NETLIST $SDC_FILE $TLUP_MAX $TLUP_MIN $TLUP_MAP] {
+foreach f [list $TECH_FILE $NDM_REF_LIB_TIMING $NDM_REF_LIB_PHYSICAL $NETLIST $SDC_FILE $TLUP_MAX $TLUP_MIN $TLUP_MAP] {
     if {![file exists $f]} {
         puts "ERROR: File not found: $f"
         exit 1
@@ -81,18 +73,15 @@ puts "INFO: All input files verified."
 # ======================================================================
 # 3. Create Design Library (.dlib)
 # ======================================================================
-#    create_lib creates the ICC2 design library.
-#    -technology : Process tech file (.tf)
-#    -ref_libs   : NDM reference library containing std cell data
-#    The last argument is the library name (creates <name>.dlib)
-#
-#    ICC1 equivalent: create_mw_lib -technology -mw_reference_library
+# Equivalent to ICC1's create_mw_lib.
+# -technology : Must be a Milkyway .tf file or an NDM technology library.
+# -ref_libs   : The reference libraries (NDM format).
 # ======================================================================
-puts "INFO: Creating design library..."
+puts "INFO: Creating design library $DLIB..."
 file mkdir $DLIB_DIR
-create_lib -technology $TECH_FILE \
-           -ref_libs $NDM_REF_LIB \
-           ${DLIB_DIR}/${DLIB_NAME}
+create_lib $DLIB \
+    -technology $TECH_FILE \
+    -ref_libs   [list $NDM_REF_LIB_TIMING $NDM_REF_LIB_PHYSICAL]
 
 # ======================================================================
 # 4. Read Synthesized Netlist
@@ -116,10 +105,10 @@ puts "INFO: Linking design..."
 link_block
 
 # --- Verify link was successful
-set unresolved [get_cells -quiet -filter "is_unresolved == true" -hierarchical]
+set unresolved [get_cells -quiet -filter "is_unbound == true" -hierarchical]
 if {[sizeof_collection $unresolved] > 0} {
     puts "WARNING: Unresolved cells found after link_block:"
-    report_ref_library
+    report_ref_libs
     puts "WARNING: Check your NDM library. Proceeding anyway..."
 } else {
     puts "INFO: All cells resolved successfully."
@@ -167,7 +156,7 @@ set_parasitic_parameters -late_spec maxTLU -early_spec minTLU
 # ======================================================================
 puts "INFO: Generating initial reports..."
 
-report_ref_library         > ../report/ref_library.rpt
+report_ref_libs            > ../report/ref_libs.rpt
 report_design              > ../report/design.rpt
 report_clocks              > ../report/clocks.rpt
 report_timing -max_paths 5 > ../report/timing_initial.rpt
@@ -195,3 +184,4 @@ puts "INFO: You can close this session or continue interactively."
 # --- Do NOT quit here — user may want to inspect the design in GUI
 # --- Uncomment the line below to auto-exit:
 # quit
+

@@ -1,0 +1,38 @@
+Parsing option_file: netlist_part1.tech
+Running Amd_64b    
+parsing layer info
+HN escaping is set to SPEF mode
+done init writers.
+done init formats.
+done init instance section.
+MultipleDeclareCircuitOutput filter is added
+done init circuit output.
+Completed   0%  Time=00:00:00  RemainingTime=00:00:17  Mem=93.6992
+Completed   2%  Time=00:00:00  RemainingTime=00:00:07  Mem=110.242
+Completed   4%  Time=00:00:00  RemainingTime=00:00:06  Mem=123.375
+Completed   6%  Time=00:00:00  RemainingTime=00:00:05  Mem=128.555
+Completed   8%  Time=00:00:00  RemainingTime=00:00:05  Mem=128.812
+Completed  10%  Time=00:00:00  RemainingTime=00:00:05  Mem=128.941
+Completed  20%  Time=00:00:00  RemainingTime=00:00:03  Mem=128.941
+Completed  30%  Time=00:00:01  RemainingTime=00:00:02  Mem=149.848
+Completed  40%  Time=00:00:01  RemainingTime=00:00:03  Mem=165.801
+Completed  50%  Time=00:00:01  RemainingTime=00:00:02  Mem=165.801
+Completed  60%  Time=00:00:02  RemainingTime=00:00:01  Mem=175.699
+Completed  70%  Time=00:00:03  RemainingTime=00:00:01  Mem=175.699
+Completed  80%  Time=00:00:03  RemainingTime=00:00:00  Mem=175.828
+Completed  90%  Time=00:00:04  RemainingTime=00:00:00  Mem=179.387
+Completed 100%  Time=00:00:04  RemainingTime=00:00:00  Mem=179.387
+Xout2CircuitOutput::endBucket. Mem= 179.387
+
+WARNING:(801) xTractor
+WARNING: found open net(s) in the design. please check opens.sum file.
+
+WARNING:(801) xTractor
+WARNING: found open net(s) in the design. please check opens.sum file.
+Remove file xout_split_1
+  
+Netlist       Elp=00:00:05 Cpu=00:00:04 Usr=4.6    Sys=0.2    Mem=179.4 
+xTractor      Elp=00:00:00 Cpu=00:00:00 Usr=0.0    Sys=0.0    Mem=156.4 
+  
+Done          Elp=00:00:05 Cpu=00:00:04 Usr=4.6    Sys=0.2    Mem=179.4 
+

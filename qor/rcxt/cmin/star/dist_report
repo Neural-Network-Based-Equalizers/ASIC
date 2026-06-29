@@ -1,0 +1,18 @@
+// Coords: partition_bottom cut_bottom lower_partition_top upper_partition_bottom cut_top partition_top
+Partition 1 has 332753 polygons, 17496 in overlap region.
+   Coords: -130000 -130000 -130000 572422 602422 632422
+Partition 2 has 373553 polygons, 32592 in overlap region.
+   Coords: 572422 602422 632422 1049640 1079640 1109640
+Partition 3 has 352943 polygons, 34917 in overlap region.
+   Coords: 1049640 1079640 1109640 1516134 1546134 1576134
+Partition 4 has 367172 polygons, 33156 in overlap region.
+   Coords: 1516134 1546134 1576134 2004076 2034076 2064076
+Partition 5 has 371857 polygons, 33389 in overlap region.
+   Coords: 2004076 2034076 2064076 2502742 2532742 2562742
+Partition 6 has 357082 polygons, 32581 in overlap region.
+   Coords: 2502742 2532742 2562742 2985322 3015322 3045322
+Partition 7 has 361951 polygons, 33016 in overlap region.
+   Coords: 2985322 3015322 3045322 3467902 3497902 3527902
+Partition 8 has 327386 polygons, 17271 in overlap region.
+   Coords: 3467902 3497902 3527902 4219800 4219800 4219800
+Overlap_dist= 3 Cut_thickness= 1 (both in microns)

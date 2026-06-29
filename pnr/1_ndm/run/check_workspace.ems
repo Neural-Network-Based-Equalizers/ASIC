@@ -1,0 +1,22 @@
+<Database>
+Name/home/ICer/Desktop/ASIC/pnr/1_ndm/run/check_workspace.ems
+Creation TimeSat Jun 27 10:09:44 2026
+Modified TimeSat Jun 27 10:09:45 2026
+Design Name
+Library Name
+</Database>
+<RuleCount>
+LM-0051
+LM-0341
+LM-0501
+LM-0522
+</RuleCount>
+<UserDefinedRules>
+</UserDefinedRules>
+<Messages>
+LM-005
+LM-034para113410para2s10para3134 with a design view (44 had ports reordered);10
+LM-052para1110para210
+LM-050para1110para210
+LM-052para113410para2s10
+</Messages>

@@ -1,0 +1,31 @@
+echo "Starting Floorplan..."
+cd 3_floorplan/run
+./run
+cd ../..
+
+echo "Starting Powerplan..."
+cd 4_powerplan/run
+./run
+cd ../..
+
+echo "Starting Placement..."
+cd 5_placment/run
+./run
+cd ../..
+
+echo "Starting CTS..."
+cd 6_cts/run
+./run
+cd ../..
+
+echo "Starting Routing..."
+cd 7_routing/run
+./run
+cd ../..
+
+echo "Starting Finish..."
+cd 9_finish/run
+./run
+cd ../..
+
+echo "All steps completed successfully!"

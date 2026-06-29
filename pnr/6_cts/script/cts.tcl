@@ -21,6 +21,7 @@
 # ICC1 equiv file : pnr45.tcl  Section "5. CTS"
 # Author  : Auto-generated for neural_eq_top PnR flow
 ########################################################################
+set_host_options -max_cores 4
 
 puts "INFO: ================================================"
 puts "INFO:  ICC2 CTS — neural_eq_top (45nm)"
@@ -45,6 +46,7 @@ open_block ${design}_pl
 
 copy_block -from_block ${design}_pl -to_block ${design}_cts
 current_block ${design}_cts
+start_gui
 
 # ======================================================================
 # 3. Pre-CTS Checks
@@ -132,15 +134,15 @@ puts "INFO: Setting CTS cell library (CLKBUF_X1/X2/X3)..."
 set_lib_cell_purpose -exclude cts [get_lib_cells -of [get_cells *]]
 
 # Step 2: Include only the designated clock buffer cells
-set_lib_cell_purpose -include cts NangateOpenCellLibrary/CLKBUF_X1
-set_lib_cell_purpose -include cts NangateOpenCellLibrary/CLKBUF_X2
-set_lib_cell_purpose -include cts NangateOpenCellLibrary/CLKBUF_X3
+set_lib_cell_purpose -include cts */CLKBUF_X1
+set_lib_cell_purpose -include cts */CLKBUF_X2
+set_lib_cell_purpose -include cts */CLKBUF_X3
 
 # Optionally include INV cells (preferred in some CTS flows for
 # better slew control due to pull-up vs pull-down resistance balance)
 # ICC1 equiv (pnr45.tcl, commented): set_clock_tree_references -references [get_lib_cells */INV*]
-# set_lib_cell_purpose -include cts NangateOpenCellLibrary/INV_X2
-# set_lib_cell_purpose -include cts NangateOpenCellLibrary/INV_X4
+# set_lib_cell_purpose -include cts */INV_X2
+# set_lib_cell_purpose -include cts */INV_X4
 
 # ======================================================================
 # 8. Clock Tree Targets (Skew & Latency)
@@ -353,3 +355,6 @@ puts "INFO:  CTS Complete!"
 puts "INFO:  Block saved: ${design}_cts"
 puts "INFO:  Next step: Step 7 — Routing"
 puts "INFO: ================================================"
+
+exit
+

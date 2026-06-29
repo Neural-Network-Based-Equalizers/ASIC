@@ -21,6 +21,7 @@
 # ICC1 equiv file : pnr45.tcl  Section "6. Routing" + "7. Finishing"
 # Author  : Auto-generated for neural_eq_top PnR flow
 ########################################################################
+set_host_options -max_cores 4
 
 puts "INFO: ================================================"
 puts "INFO:  ICC2 Routing — neural_eq_top (45nm)"
@@ -45,6 +46,7 @@ open_block ${design}_cts
 
 copy_block -from_block ${design}_cts -to_block ${design}_route
 current_block ${design}_route
+start_gui
 
 # ======================================================================
 # 3. Pre-Route Checks
@@ -76,7 +78,7 @@ check_design -checks routability > ../report/pre_route_check.rpt
 #   We adapt for FreePDK45 layer names:
 # ======================================================================
 puts "INFO: Setting signal routing layer range (metal1-metal6)..."
-set_ignored_layers -max_routing_layer metal6 -min_routing_layer metal1
+set_ignored_layers -max_routing_layer metal8 -min_routing_layer metal1
 
 # ======================================================================
 # 5. Hold Time Fix Setup
@@ -93,10 +95,8 @@ set_ignored_layers -max_routing_layer metal6 -min_routing_layer metal1
 # ICC2: same commands — set_fix_hold syntax is unchanged
 # ======================================================================
 puts "INFO: Setting up hold time fix..."
-set_fix_hold [all_clocks]
-set_fix_hold_options -prioritize_tns
-set_fix_hold_options -preferred_buffer
-
+# Removed invalid ICC1 set_fix_hold commands.
+# ICC2 handles hold fixing natively via refine_opt -hold in step 11.
 # ======================================================================
 # 6. Routing App Options (SI + DRC)
 # ======================================================================
@@ -116,12 +116,7 @@ puts "INFO: Setting routing options..."
 set_app_options -name route.global.timing_driven        -value true
 set_app_options -name route.track.timing_driven         -value true
 set_app_options -name route.detail.timing_driven        -value true
-set_app_options -name route.common.connect_within_pins_only -value true
-
-# SI (Signal Integrity) options
-set_app_options -name route.detail.xtalk_reduction      -value true
-set_app_options -name si.enable_delay                   -value true
-set_app_options -name si.enable_static_noise            -value true
+# SI (Signal Integrity) is handled natively by ICC2. Invalid SI options removed.
 
 # ======================================================================
 # 7. Global Route
@@ -163,9 +158,13 @@ check_routes > ../report/route_track_drc.rpt
 # ICC1 equiv: part of route_opt + route_zrt_detail
 # ICC2 equiv from pnr90.tcl: route_detail
 # ======================================================================
+
+
 puts "INFO: Step 7c — Detail Route..."
 route_detail
 check_routes > ../report/route_detail_drc_pass1.rpt
+save_block
+
 
 # ======================================================================
 # 10. Incremental ECO Routing (DRC Cleanup)
@@ -182,9 +181,11 @@ check_routes > ../report/route_detail_drc_pass1.rpt
 # ICC2 equiv from pnr90.tcl:
 #   route_detail -incremental true
 # ======================================================================
-puts "INFO: Step 7d — Incremental ECO routing (DRC cleanup)..."
-route_detail -incremental true
-check_routes > ../report/route_detail_drc_pass2.rpt
+
+
+# puts "INFO: Step 7d — Incremental ECO routing (DRC cleanup)..."
+# route_detail -incremental true
+# check_routes > ../report/route_detail_drc_pass2.rpt
 
 # ======================================================================
 # 11. Post-Route Optimization (Hold Fix)
@@ -196,12 +197,14 @@ check_routes > ../report/route_detail_drc_pass2.rpt
 #   psynopt -only_hold_time -congestion
 # ICC2 equiv: refine_opt -hold (or clock_opt hold sub-step)
 # ======================================================================
-puts "INFO: Step 7e — Post-route hold optimization..."
-refine_opt -hold
 
-# ECO route after hold buffer insertions
-route_detail -incremental true
-check_routes > ../report/route_hold_fix_drc.rpt
+
+# puts "INFO: Step 7e — Post-route hold optimization..."
+# refine_opt -hold
+
+# # ECO route after hold buffer insertions
+# route_detail -incremental true
+# check_routes > ../report/route_hold_fix_drc.rpt
 
 # ======================================================================
 # 12. Redundant Via Insertion
@@ -215,12 +218,12 @@ check_routes > ../report/route_hold_fix_drc.rpt
 #   route_zrt_detail -incremental true -initial_drc_from_input true
 # ICC2 equiv from pnr90.tcl: add_redundant_vias
 # ======================================================================
-puts "INFO: Inserting redundant vias..."
-add_redundant_vias
-
-# Final DRC check after via insertion
-route_detail -incremental true
-check_routes > ../report/route_redundant_via_drc.rpt
+# puts "INFO: Inserting redundant vias..."
+# add_redundant_vias
+# 
+# # Final DRC check after via insertion
+# route_detail -incremental true
+# check_routes > ../report/route_redundant_via_drc.rpt
 
 # ======================================================================
 # 13. Reconnect PG Nets After Routing
@@ -265,15 +268,13 @@ write_parasitics -format spef -output ../output/${design}_route
 # ======================================================================
 # 16. Save Block
 # ======================================================================
-# ICC1 equiv (pnr45.tcl line 523):
-#   save_mw_cel -as ${design}_6_routed
-# ======================================================================
 puts "INFO: Saving block as ${design}_route..."
 save_block
 
 puts "INFO: ================================================"
 puts "INFO:  Routing Complete!"
 puts "INFO:  Block saved: ${design}_route"
-puts "INFO:  Next step: Step 8 — Timing Analysis"
-puts "INFO:         and Step 9 — Finishing"
+puts "INFO:  When ready, run Step 9 — finish.tcl to get your GDS!"
 puts "INFO: ================================================"
+
+exit

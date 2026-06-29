@@ -1,0 +1,18 @@
+8 # number of partitions
+230991 34 # polygon count, overlap polygon count
+-130000 -130000 -130000 572422 602422 632422 # part_bottom cut_bottom lower_part_top upper_part_bottom cut_top part_top
+83 49 # polygon count, overlap polygon count
+572422 602422 632422 1049640 1079640 1109640 # part_bottom cut_bottom lower_part_top upper_part_bottom cut_top part_top
+0 0 # polygon count, overlap polygon count
+1049640 1079640 1109640 1516134 1546134 1576134 # part_bottom cut_bottom lower_part_top upper_part_bottom cut_top part_top
+0 0 # polygon count, overlap polygon count
+1516134 1546134 1576134 2004076 2034076 2064076 # part_bottom cut_bottom lower_part_top upper_part_bottom cut_top part_top
+0 0 # polygon count, overlap polygon count
+2004076 2034076 2064076 2502742 2532742 2562742 # part_bottom cut_bottom lower_part_top upper_part_bottom cut_top part_top
+0 0 # polygon count, overlap polygon count
+2502742 2532742 2562742 2985322 3015322 3045322 # part_bottom cut_bottom lower_part_top upper_part_bottom cut_top part_top
+0 0 # polygon count, overlap polygon count
+2985322 3015322 3045322 3467902 3497902 3527902 # part_bottom cut_bottom lower_part_top upper_part_bottom cut_top part_top
+0 0 # polygon count, overlap polygon count
+3467902 3497902 3527902 4219800 4219800 4219800 # part_bottom cut_bottom lower_part_top upper_part_bottom cut_top part_top
+3 1 # overlap_dist, cut_thickness

@@ -1,0 +1,21 @@
+Completed   0%  Time=00:00:00  RemainingTime=00:00:00  Mem=181.93
+Completed  10%  Time=00:00:00  RemainingTime=00:00:00  Mem=184.949
+Completed  20%  Time=00:00:00  RemainingTime=00:00:00  Mem=188.688
+Completed  40%  Time=00:00:00  RemainingTime=00:00:00  Mem=195.652
+Completed  60%  Time=00:00:00  RemainingTime=00:00:00  Mem=201.559
+Completed  80%  Time=00:00:00  RemainingTime=00:00:00  Mem=212.953
+Completed 100%  Time=00:00:00  RemainingTime=00:00:00  Mem=223.488
+output xin_sub4_part1.tmapoutput xin_sub4_part2.tmapoutput xin_sub4_part3.tmap a map of size 2398
+output xin_sub4_part4.tmap a map of size 22304
+output xin_sub4_part5.tmap a map of size 1513
+Processing for text_count_file
+Processing for split_nets
+Processing for dist_report
+output xin_sub4_part6.tmapoutput xin_sub4_part7.tmapoutput xin_sub4_part8.tmap  
+InitDB        Elp=00:00:00 Cpu=00:00:00 Usr=0.1    Sys=0.0    Mem=176.3 
+Partition     Elp=00:00:00 Cpu=00:00:00 Usr=0.2    Sys=0.0    Mem=229.6 
+  
+Done          Elp=00:00:00 Cpu=00:00:00 Usr=0.3    Sys=0.0    Mem=229.6 
+
+End Time: Wed May  2 09:45:49 2018
+

@@ -1,0 +1,15 @@
+There are "OPEN NETS". 
+"Open nets" have the same net name/number however not resistively connected;
+they are formed by more than one "Resistively Connected Groups" (RCGs).
+ You can find the open net names below.
+StarRC will never be able to determine where the source of an open net is. as such,
+StarRC has randomly chosen nodes on the open net between which a shorting ressistor
+will be inserted. The coordinates listed in this file for the shorting resistors will
+vary based on the settings for REDUCTION, REDUCTION_MAX_DELAY_ERROR, MODE, EXTRACTION.
+
+OPEN net: reg_file/n280  (2 RCGs) :
+	shorting resistor: 1 (resistance=0.01,width=100) is inserted between nodes *145017:ZN (located at (17210,158565)) and *146696:A (located at (13160,158700))
+OPEN net: datamem/n26569  (2 RCGs) :
+	shorting resistor: 1 (resistance=0.01,width=100) is inserted between nodes *144487:D (located at (170650,193530)) and *103610:Z (located at (155130,194560))
+OPEN net: datamem/n4070  (2 RCGs) :
+	shorting resistor: 1 (resistance=0.01,width=100) is inserted between nodes *85720:B2 (located at (207590,230067)) and *85784:B2 (located at (115992,253902))

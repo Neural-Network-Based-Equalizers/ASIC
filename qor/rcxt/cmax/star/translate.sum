@@ -1,0 +1,26 @@
+
+
+                         StarRC (TM)
+             Copyright (c) 1999-2012 Synopsys, Inc.
+                      All Rights Reserved
+
+
+ExecName: /usr/synopsys/StarRC/bin/StarXtract
+Version: G-2012.06-SP2
+Built on: Aug 27 2012 21:31:32
+Start Time: Wed May  2 09:45:35 2018
+
+Host ............ localhost.localdomain
+
+  
+InitDB        Elp=00:00:00 Cpu=00:00:00 Usr=0.1    Sys=0.0    Mem=176.3 
+ReadHNdb      Elp=00:00:00 Cpu=00:00:00 Usr=0.0    Sys=0.0    Mem=188.3 
+NetSelect     Elp=00:00:00 Cpu=00:00:00 Usr=0.0    Sys=0.0    Mem=188.3 
+CellSelect    Elp=00:00:00 Cpu=00:00:00 Usr=0.0    Sys=0.0    Mem=188.3 
+PlaceTerm     Elp=00:00:00 Cpu=00:00:00 Usr=0.0    Sys=0.0    Mem=188.6 
+PlaceText     Elp=00:00:00 Cpu=00:00:00 Usr=0.0    Sys=0.0    Mem=189.6 
+GDSParse      Elp=00:00:01 Cpu=00:00:00 Usr=0.5    Sys=0.0    Mem=189.7 
+Db2Xin        Elp=00:00:00 Cpu=00:00:00 Usr=0.0    Sys=0.0    Mem=189.7 
+Translate     Elp=00:00:00 Cpu=00:00:00 Usr=0.0    Sys=0.0    Mem=189.7 
+  
+Done          Elp=00:00:01 Cpu=00:00:00 Usr=0.7    Sys=0.0    Mem=189.7 

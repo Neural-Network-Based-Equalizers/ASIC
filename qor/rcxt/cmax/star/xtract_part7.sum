@@ -1,0 +1,13 @@
+Parsing option_file: xtract_part7.tech
+Reading binary grd file
+ /home/standard_cell_libraries/NangateOpenCellLibrary_PDKv1_3_v2010_12/tech/rcxt/FreePDK45_10m_Cmax.nxtgrd...
+
+Extracting... 
+Extracted 7606051 capacitors, 432179 resistors, 0 reluctors, 400690 nodes
+Reduced to 68088 nodes,  (83.0073%)
+Reduced to 41919 resistors,  (90.3005%)
+Reduced to 291211 capacitors,  (96.1713%)
+  
+xTractor      Elp=00:00:10 Cpu=00:00:09 Usr=9.7    Sys=0.1    Mem=203.4 
+  
+Done          Elp=00:00:10 Cpu=00:00:09 Usr=9.7    Sys=0.1    Mem=203.4 
