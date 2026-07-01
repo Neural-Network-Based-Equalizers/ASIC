@@ -1,5 +1,5 @@
-BLOCK: neural_eq_top
-MILKYWAY_DATABASE: ../../../pnr/neural_eq_top
+BLOCK: neural_eq_top_final
+NDM_DATABASE: ../../../pnr/2_design_library/output/neural_eq_top.dlib
 NETLIST_FILE: neural_eq_top_cmax_tm40.spef
 MAPPING_FILE: /home/standard_cell_libraries/NangateOpenCellLibrary_PDKv1_3_v2010_12/tech/rcxt/FreePDK45_10m.map
 TCAD_GRD_FILE:  /home/standard_cell_libraries/NangateOpenCellLibrary_PDKv1_3_v2010_12/tech/rcxt/FreePDK45_10m_Cmax.nxtgrd

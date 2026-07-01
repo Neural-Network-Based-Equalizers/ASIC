@@ -7,49 +7,61 @@ standard_cell_libraries/
 
 # --- Synthesis work directories
 syn/script/work/
-syn/output/*.v
-syn/output/*.ddc
-syn/output/*.svf
-syn/output/*.sdc
-syn/output/*.sdf
+syn/output/
 
-# --- PnR design libraries and NDM outputs (binary, large)
-pnr/1_ndm/output/
-pnr/2_design_library/output/
-pnr/3_floorplan/output/
-pnr/4_powerplan/output/
-pnr/5_placment/output/
-pnr/6_cts/output/
-pnr/7_routing/output/
-pnr/8_timing_analysis/output/
-pnr/9_finish/output/
+# --- PnR design libraries and outputs (binary, large)
+pnr/*/output/
+pnr/*/report/
 
-# --- Tool-generated lock files
+# --- Extraction (StarRC) directories
+qor/rcxt/*/star/
+qor/rcxt/*/star_cmd/
+
+# --- Tool-generated lock and binary databases
+**/*.ndm
 **/*.ndm.lock
+**/*.dlib/
 **/*.dlib.lock
+**/*.errdm/
 
-# --- Large log files
+# --- Layout, Netlist, and Parasitic outputs (Huge)
+*.gds
+*.gds.gz
+*.spef
+*.spef.gz
+*.def
+*.def.gz
+
+# --- Large log and text files
 *.log
 *.txt
 !README.txt
 
-# --- Report files (optional: comment out if you want to track reports)
-# pnr/*/report/
+# --- Report files
+*.rpt
 
 # --- Tool temp / run directory artifacts
 pnr/*/run/*.tcl.bak
 pnr/*/run/*.cmd
 pnr/*/run/*.err
 
-# --- DFT outputs
+# --- DFT & Formality outputs
 dft/output/
-
-# --- Formality outputs
 formality/output/
 formality/fv/
 
-# --- Misc tool artifacts
+# --- Misc OS & Tool artifacts
 *.DS_Store
+.DS_Store
 *.swp
 *.swo
 *~
+
+# --- Large Documents / Media (excluding our diagram)
+*.pdf
+!ASIC_ECO_Cycle_Textbook.pdf
+*.jpg
+*.jpeg
+*.png
+!ASIC_ECO_Cycle_Textbook.png
+*.docx

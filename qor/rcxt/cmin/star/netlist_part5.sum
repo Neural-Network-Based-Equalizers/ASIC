@@ -1,6 +1,0 @@
-Parsing option_file: netlist_part5.tech
-  
-Netlist       Elp=00:00:01 Cpu=00:00:00 Usr=0.2    Sys=0.0    Mem=76.2  
-xTractor      Elp=00:00:00 Cpu=00:00:00 Usr=0.0    Sys=0.0    Mem=63.5  
-  
-Done          Elp=00:00:01 Cpu=00:00:00 Usr=0.2    Sys=0.0    Mem=76.2  
